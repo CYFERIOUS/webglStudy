@@ -22,5 +22,7 @@
   "bugs": {
     "url": "https://github.com/CYFERIOUS/webglStudy/issues"
   },
-  "homepage": "https://github.com/CYFERIOUS/webglStudy#readme"
+  "homepage": "https://github.com/CYFERIOUS/webglStudy#readme",
+  "devDependencies": {
+  }
 }
