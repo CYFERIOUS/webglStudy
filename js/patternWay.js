@@ -7,6 +7,7 @@ var Module = (function () {
 
 
   //for create objects
+
   var geometry, geometro, floor, geometry2, material,  mesh, sphere, axis, light, ambient, spotLight1;
   var material2 = [];
   var geometrical = [];
@@ -45,13 +46,16 @@ var Module = (function () {
   }
 
 
+
   var init = function (message) {
     	scene = new THREE.Scene();
         
         camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
+
         camera.position.z = 5000;
  
      
+
         geometry2 = new THREE.SphereGeometry( 300, 10, 10 );
        
 
@@ -158,6 +162,7 @@ var Module = (function () {
         
         //scene.add( sphere );
         //scene.add( axis );
+
  
         renderer = new THREE.WebGLRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight );
@@ -167,6 +172,7 @@ var Module = (function () {
 
    var animate = function (message) {
    		requestAnimationFrame( animate );
+
         
         for (var i = 0; i<15; i++){
             if(i==0){
