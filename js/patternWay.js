@@ -48,7 +48,11 @@ var Module = (function () {
 
 
   var init = function (message) {
+ 
+
     	scene = new THREE.Scene();
+
+        scene.background = new THREE.Color( 0x999999 );
         
         camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
 
@@ -83,11 +87,11 @@ var Module = (function () {
         var hemi = new THREE.HemisphereLight( 0xffffff, 0xFF0000, 1 );
         //scene.add( hemi );
 
-        var pointsA = new THREE.PointLight( 0xff0000, 10 , 20 , 0 );
+        var pointsA = new THREE.PointLight( 0xffffff, 10 , 20 , 0 );
         pointsA.power = (2 * (9*3.1416));
         pointsA.position.set( 3000, 800, 0 );
 
-        var pointsB = new THREE.PointLight( 0x0000FF, 10 , 20 , 0 );
+        var pointsB = new THREE.PointLight( 0x175fe0, 10 , 20 , 0 );
         pointsB.power = (9 * (9*3.1416));
         pointsB.position.set( -3000, -800, 0 );
 
