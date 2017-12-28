@@ -16,4 +16,6 @@ flujoEnv/
 file-s/
 node_modules/
 static/css/*.css
-js/bower_components/
+**.min.js
+**.js
+maps/

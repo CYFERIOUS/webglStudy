@@ -26,17 +26,19 @@
   "devDependencies": {
     "browser-sync": "^2.11.2",
     "del": "^2.2.0",
+    "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-compass": "^2.1.0",
     "gulp-concat": "^2.6.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.3.2",
     "gulp-sourcemaps": "^1.6.0",
+    "gulp-typescript": "^3.2.3",
     "gulp-uglify": "^1.5.3",
-    "jshint": "^2.9.4"
+    "jshint": "^2.9.4",
+    "typescript": "^2.6.2"
   },
   "dependencies": {
-    "gulp": "^3.9.1",
     "gulp-install": "^1.1.0"
   }
 }

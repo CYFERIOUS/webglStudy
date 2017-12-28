@@ -9,8 +9,8 @@
 var config = {
 	jsConcatFiles: [
 	
-		'./js/classie.js',
-		'./js/behaviors.js'
+		'./js/**.js',
+	
 	], 
 	buildFilesFoldersRemove:[
 		'./build/scss/', 
@@ -40,7 +40,10 @@ var gulp = require('gulp'),
 	concat = require('gulp-concat'),
 	uglify = require('gulp-uglify'),
 	rename = require('gulp-rename'),
-	del = require('del');
+	del = require('del'),
+	ts = require("gulp-typescript");
+
+var tsProject = ts.createProject("tsconfig.json");
 
 
 // ////////////////////////////////////////////////
@@ -63,11 +66,17 @@ gulp.task('scripts', function() {
 		.pipe(concat('temp.js'))
 		.pipe(uglify())
 		.on('error', errorlog)
-		.pipe(rename('iscreamsite.min.js'))		
+		.pipe(rename('webgl.min.js'))		
     .pipe(sourcemaps.write('../maps'))
     .pipe(gulp.dest('./js/'))
 
     .pipe(reload({stream:true}));
+});
+
+gulp.task("typescript", function () {
+    return tsProject.src()
+        .pipe(tsProject())
+        .js.pipe(gulp.dest("./js/"));
 });
 
 
@@ -158,7 +167,9 @@ gulp.task ('watch', function(){
 	gulp.watch('scss/**/*.scss', ['styles']);
 	gulp.watch('js/**/*.js', ['scripts']);
   	gulp.watch('**/*.html', ['html']);
+  	gulp.watch('**/*.ts', ['typescript']);
+  	
 });
 
 
-gulp.task('default', ['scripts', 'styles', 'html', 'browser-sync', 'watch']);
+gulp.task('default', ['typescript','scripts', 'styles', 'html', 'browser-sync', 'watch']);
