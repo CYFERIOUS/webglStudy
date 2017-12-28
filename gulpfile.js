@@ -68,7 +68,7 @@ gulp.task('scripts', function() {
 		.on('error', errorlog)
 		.pipe(rename('webgl.min.js'))		
     .pipe(sourcemaps.write('../maps'))
-    .pipe(gulp.dest('./js/'))
+    .pipe(gulp.dest('./min/'))
 
     .pipe(reload({stream:true}));
 });
@@ -172,4 +172,4 @@ gulp.task ('watch', function(){
 });
 
 
-gulp.task('default', ['typescript','scripts', 'styles', 'html', 'browser-sync', 'watch']);
+gulp.task('default', ['scripts', 'styles', 'html', 'browser-sync', 'watch']);
