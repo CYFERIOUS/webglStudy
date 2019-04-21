@@ -1,4 +1,5 @@
 /node_modules
+build/dist/main.js
 /test/js
 /test/browsertest/js
 /test/fixtures/temp-cache-fixture
