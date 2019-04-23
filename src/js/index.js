@@ -1,4 +1,4 @@
-import './scss/test.scss';
+import '../scss/test.scss';
 import {Canvas} from './canvas.js';
 
 const c = new Canvas();

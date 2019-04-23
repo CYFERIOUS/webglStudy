@@ -1,4 +1,6 @@
 const webpack = require('webpack');
+const htmlWebpackPlugin = require('html-webpack-plugin');
+const sassLoader = require('sass-loader');
 const path = require('path');
 
 /*
@@ -65,20 +67,19 @@ module.exports = {
 			}
 		]
 	},
+
 	watch:true,
 	devServer: {
-		contentBase: path.join(__dirname, 'build'),
+		contentBase: path.join(__dirname, './dist'),
 		compress: true,
 		port: 9000
 	},
+	entry: './src/js',
 	output: {
-		chunkFilename: '[name].js',
-		filename: '[name].js',
-		path: path.resolve(__dirname, './build/dist')
+		filename: 'cube_bundle.js',
+		path: path.resolve(__dirname, './dist')
 	},
-
 	mode: 'development',
-
 	optimization: {
 		splitChunks: {
 			cacheGroups: {
@@ -93,5 +94,11 @@ module.exports = {
 			minSize: 30000,
 			name: true
 		}
-	}
+	},
+	plugins:[
+		new htmlWebpackPlugin({
+			template: './src/index.html'
+		})
+
+	]
 };
