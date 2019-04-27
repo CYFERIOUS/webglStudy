@@ -9,6 +9,8 @@ let _renderer;
 let _axis;
 let _cubo = new Array();
 let _light = {};
+let _rDomELement;
+let _animating = false;
 
 
 const cube = new Cube(100,100,100);
@@ -28,12 +30,16 @@ export class Canvas{
     }
 
     animate(){
+
+        
         requestAnimationFrame(() =>{
             this.animate();
+            if(_animating){
             for (let i in _cubo){
                 _cubo[i].rotation.x += (0.001*i);
                 _cubo[i].rotation.y += (0.002*i);
             }
+        }
             _renderer.render( _scene, _camera );
         });
     }
@@ -46,12 +52,24 @@ export class Canvas{
         _scene.add( _light.bulb1 );
         _scene.add( _light.bulb2 );
         _scene.add( _light.bulb3 );
-       
+      
         _renderer = new THREE.WebGLRenderer();
         _renderer.setSize( window.innerWidth, window.innerHeight );
-        document.body.appendChild( _renderer.domElement );
+        _rDomELement = _renderer.domElement;
+        document.body.appendChild( _rDomELement );
       
 
+    }
+    addMouseHandler(){
+        
+        _rDomELement.addEventListener('click',this.onMouseUp,false);
+
+    }
+
+    onMouseUp(event){
+        
+        event.preventDefault();
+        _animating = !_animating;
     }
 }
 

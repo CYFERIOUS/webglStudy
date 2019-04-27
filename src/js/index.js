@@ -8,8 +8,11 @@ class Container{
 
     constructor(){
         c.draw();
+        c.addMouseHandler();
         c.animate();
     }
+
+   
 }
 
 
