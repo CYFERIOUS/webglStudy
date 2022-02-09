@@ -1,5 +1,5 @@
 /node_modules
-build/dist/main.js
+/dist
 /test/js
 /test/browsertest/js
 /test/fixtures/temp-cache-fixture
