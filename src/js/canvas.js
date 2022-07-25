@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 import {Cube} from './cube.js';
+import {Sphere} from './sphere.js';
 import {Light} from './lights.js';
 
 let _scene;
@@ -11,9 +12,11 @@ let _cubo = new Array();
 let _light = {};
 let _rDomELement;
 let _animating = false;
+let _sphere = new Array();
 
 
 const cube = new Cube(100,100,100);
+const sphere = new Sphere(500,30,30);
 const lighting = new Light();
 
 export class Canvas{
@@ -23,9 +26,10 @@ export class Canvas{
         _scene.background = new THREE.Color( 0x909ead );
         _camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
         _camera.position.z = 5000;
-        _axis = new THREE.AxesHelper( 500 );
+        _axis = new THREE.AxesHelper( 5000 );
         _axis.position.set( 0, 0, 0 );
         _cubo = cube.draw();
+        _sphere = sphere.draw();
         _light = lighting.drawLights();
     }
 
@@ -35,24 +39,38 @@ export class Canvas{
         requestAnimationFrame(() =>{
             this.animate();
             if(_animating){
-            for (let i in _cubo){
-                _cubo[i].rotation.x += (0.001*i);
-                _cubo[i].rotation.y += (0.002*i);
+                for (let i in _cubo){
+                    _cubo[i].rotation.x += (0.001*i);
+                    _cubo[i].rotation.y += (0.002*i);
+                }
+                for (let i in _sphere){
+                    _sphere[i].rotation.x += (0.001*i);
+                    _sphere[i].rotation.y += (0.002*i);
+                }
             }
-        }
             _renderer.render( _scene, _camera );
         });
     }
-    
+   
     draw() {
-        for (let i in _cubo){
-             _scene.add( _cubo[i] );
+        
+        var random = Math.round(Math.random() * (2 - 1) + 1);
+
+        switch(random){
+            case 1:
+                this.cubeAdder();
+            break;
+            case 2:
+                this.sphereAdder();
+            break;
         }
+        
+
 
         _scene.add( _light.bulb1 );
         _scene.add( _light.bulb2 );
         _scene.add( _light.bulb3 );
-      
+        
         _renderer = new THREE.WebGLRenderer();
         _renderer.setSize( window.innerWidth, window.innerHeight );
         _rDomELement = _renderer.domElement;
@@ -60,6 +78,19 @@ export class Canvas{
       
 
     }
+
+    cubeAdder(){
+        for (let i in _cubo){
+             _scene.add( _cubo[i] );
+        }   
+    }
+
+    sphereAdder(){
+        for (let i in _sphere){
+            _scene.add(_sphere[i]);
+        }   
+    }
+
     addMouseHandler(){
         
         _rDomELement.addEventListener('click',this.onMouseUp,false);
