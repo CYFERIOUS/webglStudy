@@ -19,7 +19,7 @@ export class Materials{
 
       basicMaterial(){
         _meshBasicMaterial = new THREE.MeshBasicMaterial({
-                    color: 0x03b7fa,
+                    color: 0x35373a,
                     wireframe:true,
                     opacity: 0.3,
                     transparent: true

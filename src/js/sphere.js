@@ -11,8 +11,10 @@ const basic_material = new Materials(1);
 
 export class Sphere{ 
     constructor(R,Hs,Vs) {
+
+        var random = Math.round(Math.random() * (Math.PI*2 - 0) + 0);
       
-        _geosphere = new THREE.SphereGeometry( R, Hs, Vs );
+        _geosphere = new THREE.SphereGeometry( R, Hs, Vs, 0, random, 0, random);
         
         _geoball = new THREE.Mesh( _geosphere, basic_material );
         _geoball.position.x = 0;
