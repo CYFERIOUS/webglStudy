@@ -2,6 +2,7 @@ import * as THREE from 'three';
 
 import {Cube} from './cube.js';
 import {Sphere} from './sphere.js';
+import {Torus} from './torus.js';
 import {Light} from './lights.js';
 
 let _scene;
@@ -13,15 +14,18 @@ let _light = {};
 let _rDomELement;
 let _animating = false;
 let _sphere = new Array();
+let _torus = new Array();
 
 
 const cube = new Cube(100,100,100);
 const sphere = new Sphere(500,30,30);
+const torus = new Torus(100,20,30,30);
 const lighting = new Light();
 
 export class Canvas{
 
-    constructor() {
+    constructor(Cube){
+
         _scene = new THREE.Scene();
         _scene.background = new THREE.Color( 0x909ead );
         _camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -30,6 +34,7 @@ export class Canvas{
         _axis.position.set( 0, 0, 0 );
         _cubo = cube.draw();
         _sphere = sphere.draw();
+        _torus = torus.draw();
         _light = lighting.drawLights();
     }
 
@@ -47,6 +52,10 @@ export class Canvas{
                     _sphere[i].rotation.x += (0.001*i);
                     _sphere[i].rotation.y += (0.002*i);
                 }
+                for (let i in _torus){
+                    _torus[i].rotation.x += (0.001*i);
+                    _torus[i].rotation.y += (0.002*i);
+                }
             }
             _renderer.render( _scene, _camera );
         });
@@ -54,7 +63,7 @@ export class Canvas{
    
     draw() {
         
-        var random = Math.round(Math.random() * (2 - 1) + 1);
+        var random = Math.round(Math.random() * (3 - 1) + 1);
 
         switch(random){
             case 1:
@@ -63,9 +72,12 @@ export class Canvas{
             case 2:
                 this.sphereAdder();
             break;
+            case 3:
+                this.torusAdder();
+            break;
         }
         
-
+       
 
         _scene.add( _light.bulb1 );
         _scene.add( _light.bulb2 );
@@ -88,6 +100,12 @@ export class Canvas{
     sphereAdder(){
         for (let i in _sphere){
             _scene.add(_sphere[i]);
+        }   
+    }
+
+    torusAdder(){
+        for (let i in _torus){
+            _scene.add(_torus[i]);
         }   
     }
 
