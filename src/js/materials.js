@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 let _meshBasicMaterial;
 let _meshPhongMaterial;
-
+let _meshBiMaterial;
 export class Materials{ 
 
     constructor(option) {
@@ -12,6 +12,9 @@ export class Materials{
             break;
             case 2:
                 return this.phongMaterial();
+            break;
+            case 3:
+                return this.bisideMaterial();
             break;
 
         }
@@ -36,6 +39,17 @@ export class Materials{
                     transparent: true
                     });
         return _meshPhongMaterial;
+        
+      }
+
+      bisideMaterial(){
+        _meshBiMaterial = new THREE.MeshBasicMaterial({
+                    color: 0xffffff,
+                    opacity: 0.3,
+                    transparent: true,
+                    side:THREE.DoubleSide
+                    });
+        return _meshBiMaterial;
         
       }
 

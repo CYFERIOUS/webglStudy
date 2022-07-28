@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import {Cube} from './cube.js';
 import {Sphere} from './sphere.js';
 import {Torus} from './torus.js';
+import {RandomGeo} from './randomGeo.js';
 import {Light} from './lights.js';
 
 let _scene;
@@ -15,11 +16,13 @@ let _rDomELement;
 let _animating = false;
 let _sphere = new Array();
 let _torus = new Array();
+let _geoRand = new Array();
 
 
 const cube = new Cube(100,100,100);
 const sphere = new Sphere(500,30,30);
 const torus = new Torus(100,20,30,30);
+const randomShape = new RandomGeo(100,100,100,100);
 const lighting = new Light();
 
 export class Canvas{
@@ -33,6 +36,7 @@ export class Canvas{
         _axis = new THREE.AxesHelper( 5000 );
         _axis.position.set( 0, 0, 0 );
         _cubo = cube.draw();
+        _geoRand = randomShape.draw();
         _sphere = sphere.draw();
         _torus = torus.draw();
         _light = lighting.drawLights();
@@ -56,6 +60,10 @@ export class Canvas{
                     _torus[i].rotation.x += (0.001*i);
                     _torus[i].rotation.y += (0.002*i);
                 }
+                for (let i in _geoRand){
+                    _geoRand[i].rotation.x += (0.001*i);
+                    _geoRand[i].rotation.y += (0.002*i);
+                }
             }
             _renderer.render( _scene, _camera );
         });
@@ -63,7 +71,7 @@ export class Canvas{
    
     draw() {
         
-        var random = Math.round(Math.random() * (3 - 1) + 1);
+        var random = Math.round(Math.random() * (4 - 1) + 1);
 
         switch(random){
             case 1:
@@ -75,10 +83,13 @@ export class Canvas{
             case 3:
                 this.torusAdder();
             break;
+            case 4:
+                this.geoBufferAdder();
+            break;
         }
         
        
-
+        _scene.add(_geoRand);
         _scene.add( _light.bulb1 );
         _scene.add( _light.bulb2 );
         _scene.add( _light.bulb3 );
@@ -106,6 +117,12 @@ export class Canvas{
     torusAdder(){
         for (let i in _torus){
             _scene.add(_torus[i]);
+        }   
+    }
+
+    geoBufferAdder(){
+        for (let i in _geoRand){
+            _scene.add(_geoRand[i]);
         }   
     }
 

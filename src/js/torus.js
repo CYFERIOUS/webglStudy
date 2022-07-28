@@ -12,7 +12,7 @@ const basic_material = new Materials(2);
 export class Torus{ 
     constructor(R,D,Rsn,Tub) {
 
-      
+    
         _geoTorus = new THREE.TorusGeometry( R, D, Rsn, Tub);
         
         _donut = new THREE.Mesh( _geoTorus, basic_material );
@@ -25,8 +25,9 @@ export class Torus{
       }
 
       createMatrix(){
+          var random = Math.round(Math.random() * (Math.PI*2 - 5) + 5);
          for(let i of _size){
-            this.constructor(i,22,30,30); 
+            this.constructor(i,22,30,random); 
           }
       }
     
