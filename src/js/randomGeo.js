@@ -7,13 +7,11 @@ let _size = new Array(100,200,300,400,500,600,700,800,900,1000);
 let _pile = new Array();
 
 
-const basic_material = new Materials(3);
+const basic_material = new Materials(4);
 
 export class RandomGeo{ 
     constructor(A,B,C,D) {
 
-    
-       
 let _geoRandom = new THREE.BufferGeometry()
 const points = [
     new THREE.Vector3(-C,C,-C),//c
@@ -37,9 +35,6 @@ _geoRandom.setFromPoints(points)
 _geoRandom.computeVertexNormals()
 
  _randomMesh = new THREE.Mesh(_geoRandom, basic_material);
-
-  
-
 
         _randomMesh.position.x = 0;
         _randomMesh.position.y = 0;
