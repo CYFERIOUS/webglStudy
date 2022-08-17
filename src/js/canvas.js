@@ -21,8 +21,8 @@ let _sphere = new Array();
 let _torus = new Array();
 let _geoRand = new Array();
 let _llanura = new Array();
-
-
+let activeNormals = true;
+let normals = new Array();
 
 const cube = new Cube(100,100,100);
 const sphere = new Sphere(500,30,30);
@@ -123,7 +123,8 @@ export class Canvas{
                     
                 break;
                 case '5':
-                    this.llanuraAdder();
+                    this.llanuraAdder(activeNormals);
+                    activeNormals = !activeNormals;
                 break;
 
             }
@@ -154,15 +155,22 @@ export class Canvas{
         }
     }
 
-    llanuraAdder(){
+    llanuraAdder(activeNormals){
 
-       //const normals = new VertexNormalsHelper( _llanura, 500, 0x00ff00, 10 );
-       
-        for (let i in _llanura){
-            const normals = new VertexNormalsHelper( _llanura[i], 500, 0x00ff00, 10 );
-            _scene.add(_llanura[i]);
-            _scene.add(normals);
-        }   
+         for (let i in _llanura) {
+            
+            if (activeNormals) {
+                let temp = new VertexNormalsHelper( _llanura[i], 500, 0x00ff00, 10 );
+                normals[i] = temp;
+                _scene.add(_llanura[i]);
+                _scene.add(temp);
+                
+            } else {
+                _scene.remove(_llanura[i]);
+                _scene.remove(normals[i]);
+            }
+        }
+          
     }
 
     addMouseHandler(){

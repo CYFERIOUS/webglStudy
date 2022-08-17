@@ -58,7 +58,7 @@ export class Materials{
       }
 
       mDepthMaterial(){
-        _mDepthMaterial = new THREE.MeshDepthMaterial({color: 0xffffff,
+        _mDepthMaterial = new THREE.MeshDepthMaterial({
                     opacity: 0.3,
                     transparent: true,});
         return _mDepthMaterial;
