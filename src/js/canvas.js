@@ -23,6 +23,7 @@ let _geoRand = new Array();
 let _llanura = new Array();
 let activeNormals = true;
 let normals = new Array();
+let _currentGeo = new Array();
 
 const cube = new Cube(100,100,100);
 const sphere = new Sphere(500,30,30);
@@ -54,7 +55,6 @@ export class Canvas{
 
     animate(){
 
-        
         requestAnimationFrame(() =>{
             this.animate();
             let ADDX = 0.001;
@@ -90,43 +90,46 @@ export class Canvas{
     
    
     draw() {
-        var random = Math.round(Math.random() * (5 - 1) + 1);
-        
         this.primitiveAdder(true,_cubo);
-        
+        _currentGeo = _cubo;
         document.addEventListener("keydown", event => {
             switch(event.key){
                 case '1':
+                    _currentGeo = _cubo;
                     this.primitiveAdder(true,_cubo);
                     this.primitiveAdder(false,_sphere);
                     this.primitiveAdder(false,_torus);
                     this.primitiveAdder(false,_geoRand);
+                    this.normalsAdder(activeNormals,_currentGeo);
+                    activeNormals = !activeNormals;
                 break;
                 case '2':
+                    _currentGeo = _sphere;
                     this.primitiveAdder(false,_cubo);
                     this.primitiveAdder(true,_sphere);
                     this.primitiveAdder(false,_torus);
                     this.primitiveAdder(false,_geoRand);
-                    
+                    this.normalsAdder(activeNormals,_currentGeo);
+                    activeNormals = !activeNormals;
                 break;
                 case '3':
+                    _currentGeo = _torus;
                     this.primitiveAdder(false,_cubo);
                     this.primitiveAdder(false,_sphere);
                     this.primitiveAdder(true,_torus);
                     this.primitiveAdder(false,_geoRand);
+                    this.normalsAdder(activeNormals,_currentGeo);
+                    activeNormals = !activeNormals;
                 break;
                 case '4':
+                    _currentGeo = _geoRand;
                     this.primitiveAdder(false,_cubo);
                     this.primitiveAdder(false,_sphere);
                     this.primitiveAdder(false,_torus);
                     this.primitiveAdder(true,_geoRand);
-                    
-                break;
-                case '5':
-                    this.llanuraAdder(activeNormals);
+                    this.normalsAdder(activeNormals,_currentGeo);
                     activeNormals = !activeNormals;
                 break;
-
             }
         });      
         
@@ -155,18 +158,14 @@ export class Canvas{
         }
     }
 
-    llanuraAdder(activeNormals){
-
-         for (let i in _llanura) {
-            
+    normalsAdder(activeNormals,_geometry){
+            console.log(activeNormals);
+         for (let i in _geometry) {
             if (activeNormals) {
-                let temp = new VertexNormalsHelper( _llanura[i], 500, 0x00ff00, 10 );
+                let temp = new VertexNormalsHelper( _geometry[i], 500, 0x1762e5, 10 );
                 normals[i] = temp;
-                _scene.add(_llanura[i]);
                 _scene.add(temp);
-                
             } else {
-                _scene.remove(_llanura[i]);
                 _scene.remove(normals[i]);
             }
         }
