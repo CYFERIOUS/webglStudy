@@ -78,8 +78,8 @@ export class Canvas{
                     _geoRand[i].rotation.y += (ADDY*i);
                     
                 }
-                for (let i in _llanura){
-                    _llanura[i].rotation.z += (ADDZ*i);
+                for (let i in normals){
+                    normals[i].update();
                     
                 }
             }
@@ -95,6 +95,7 @@ export class Canvas{
         document.addEventListener("keydown", event => {
             switch(event.key){
                 case '1':
+                    this.normalsAdder(false,_currentGeo);
                     _currentGeo = _cubo;
                     this.primitiveAdder(true,_cubo);
                     this.primitiveAdder(false,_sphere);
@@ -104,6 +105,7 @@ export class Canvas{
                     activeNormals = !activeNormals;
                 break;
                 case '2':
+                    this.normalsAdder(false,_currentGeo);
                     _currentGeo = _sphere;
                     this.primitiveAdder(false,_cubo);
                     this.primitiveAdder(true,_sphere);
@@ -113,6 +115,7 @@ export class Canvas{
                     activeNormals = !activeNormals;
                 break;
                 case '3':
+                    this.normalsAdder(false,_currentGeo);
                     _currentGeo = _torus;
                     this.primitiveAdder(false,_cubo);
                     this.primitiveAdder(false,_sphere);
@@ -122,6 +125,7 @@ export class Canvas{
                     activeNormals = !activeNormals;
                 break;
                 case '4':
+                    this.normalsAdder(false,_currentGeo);
                     _currentGeo = _geoRand;
                     this.primitiveAdder(false,_cubo);
                     this.primitiveAdder(false,_sphere);
@@ -159,7 +163,6 @@ export class Canvas{
     }
 
     normalsAdder(activeNormals,_geometry){
-            console.log(activeNormals);
          for (let i in _geometry) {
             if (activeNormals) {
                 let temp = new VertexNormalsHelper( _geometry[i], 500, 0x1762e5, 10 );
