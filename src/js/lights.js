@@ -3,6 +3,7 @@ import * as THREE from 'three';
 let _pointsA;
 let _pointsB;
 let _ambientC;
+let _directional; 
 let _lumen;
 
 export class Light{
@@ -18,6 +19,8 @@ export class Light{
 
 
         _ambientC = new THREE.AmbientLight( 0x222222 );
+
+        _directional = new THREE.DirectionalLight( 0x005a7c );
         
 	}
 
@@ -25,7 +28,8 @@ export class Light{
 		_lumen = {
 			bulb1: _pointsA,
 			bulb2: _pointsB,
-			bulb3: _ambientC
+			bulb3: _ambientC,
+			bulb4: _directional
 		
 		};
 		return _lumen;

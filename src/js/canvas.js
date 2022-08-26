@@ -4,6 +4,7 @@ import {Cube} from './cube.js';
 import {Sphere} from './sphere.js';
 import {Torus} from './torus.js';
 import {RandomGeo} from './randomGeo.js';
+import {Octahedron} from './octahedron.js';
 import {Plane} from './plane.js';
 import {Light} from './lights.js';
 import { VertexNormalsHelper } from '../../node_modules/three/examples/jsm/helpers/VertexNormalsHelper.js';
@@ -20,6 +21,7 @@ let _animating = false;
 let _sphere = new Array();
 let _torus = new Array();
 let _geoRand = new Array();
+let _octahedron = new Array(1000,1000,1000,1000,500);
 let _llanura = new Array();
 let activeNormals = true;
 let normals = new Array();
@@ -29,6 +31,7 @@ const cube = new Cube(100,100,100);
 const sphere = new Sphere(500,30,30);
 const torus = new Torus(100,20,30,30);
 const randomShape = new RandomGeo(100,100,100,100);
+const octahedron = new Octahedron(100,100,100,100,100);
 const planicie = new Plane(10000,10000,10,10);
 const lighting = new Light();
 
@@ -47,6 +50,7 @@ export class Canvas{
         _sphere = sphere.draw();
         _torus = torus.draw();
         _llanura = planicie.draw();
+        _octahedron = octahedron.draw();
         _light = lighting.drawLights();
 
     }
@@ -59,7 +63,7 @@ export class Canvas{
             this.animate();
             let ADDX = 0.001;
             let ADDY = 0.002;
-            let ADDZ = 0.5;
+            
             if(_animating){
                 for (let i in _cubo){
                     _cubo[i].rotation.x += (ADDX*i);
@@ -76,6 +80,12 @@ export class Canvas{
                 for (let i in _geoRand){
                     _geoRand[i].rotation.x += (ADDX*i);
                     _geoRand[i].rotation.y += (ADDY*i);
+                    
+                }
+
+                for (let i in _octahedron){
+                    _octahedron[i].rotation.x += (ADDX*i);
+                    _octahedron[i].rotation.y += (ADDY*i);
                     
                 }
                 for (let i in normals){
@@ -100,6 +110,7 @@ export class Canvas{
                     this.primitiveAdder(true,_cubo);
                     this.primitiveAdder(false,_sphere);
                     this.primitiveAdder(false,_torus);
+                    this.primitiveAdder(false,_octahedron);
                     this.primitiveAdder(false,_geoRand);
                     this.normalsAdder(activeNormals,_currentGeo);
                     activeNormals = !activeNormals;
@@ -110,6 +121,7 @@ export class Canvas{
                     this.primitiveAdder(false,_cubo);
                     this.primitiveAdder(true,_sphere);
                     this.primitiveAdder(false,_torus);
+                    this.primitiveAdder(false,_octahedron);
                     this.primitiveAdder(false,_geoRand);
                     this.normalsAdder(activeNormals,_currentGeo);
                     activeNormals = !activeNormals;
@@ -120,6 +132,7 @@ export class Canvas{
                     this.primitiveAdder(false,_cubo);
                     this.primitiveAdder(false,_sphere);
                     this.primitiveAdder(true,_torus);
+                    this.primitiveAdder(false,_octahedron);
                     this.primitiveAdder(false,_geoRand);
                     this.normalsAdder(activeNormals,_currentGeo);
                     activeNormals = !activeNormals;
@@ -130,7 +143,19 @@ export class Canvas{
                     this.primitiveAdder(false,_cubo);
                     this.primitiveAdder(false,_sphere);
                     this.primitiveAdder(false,_torus);
+                    this.primitiveAdder(false,_octahedron);
                     this.primitiveAdder(true,_geoRand);
+                    this.normalsAdder(activeNormals,_currentGeo);
+                    activeNormals = !activeNormals;
+                break;
+                case '5':
+                    this.normalsAdder(false,_currentGeo);
+                    _currentGeo = _octahedron;
+                    this.primitiveAdder(false,_cubo);
+                    this.primitiveAdder(false,_sphere);
+                    this.primitiveAdder(false,_torus);
+                    this.primitiveAdder(false,_geoRand);
+                    this.primitiveAdder(true,_currentGeo);
                     this.normalsAdder(activeNormals,_currentGeo);
                     activeNormals = !activeNormals;
                 break;
@@ -141,6 +166,7 @@ export class Canvas{
         _scene.add( _light.bulb1 );
         _scene.add( _light.bulb2 );
         _scene.add( _light.bulb3 );
+        _scene.add( _light.bulb4 );
         
         _renderer = new THREE.WebGLRenderer();
         _renderer.setSize( window.innerWidth, window.innerHeight );

@@ -4,6 +4,10 @@ let _meshBasicMaterial;
 let _meshPhongMaterial;
 let _meshBiMaterial;
 let _mDepthMaterial;
+let _mPointMaterial;
+let _mLambertMaterial;
+let _mPhongMaterial;
+let _mStandardMaterial;
 export class Materials{ 
 
     constructor(option) {
@@ -20,7 +24,18 @@ export class Materials{
             case 4:
                 return this.mDepthMaterial();
             break;
-
+            case 5:
+                return this.mPointMaterial();
+            break;
+            case 6:
+                return this.mLambertMaterial();
+            break;
+            case 7:
+                return this.mPhongMaterial();
+            break;
+            case 8:
+                return this.mStandardMaterial();
+            break;
 
         }
       }
@@ -28,9 +43,9 @@ export class Materials{
       basicMaterial(){
         _meshBasicMaterial = new THREE.MeshBasicMaterial({
                     color: 0x35373a,
-                    wireframe:true,
-                    opacity: 0.3,
-                    transparent: true
+                    wireframe:false,
+                    opacity: 1,
+                   
                 });
         return _meshBasicMaterial;
          
@@ -50,7 +65,7 @@ export class Materials{
       bisideMaterial(){
         _meshBiMaterial = new THREE.MeshBasicMaterial({
                     color: 0x03b7fa,
-                    opacity: 0.3,
+                    opacity: 0.6,
                     transparent: true,
                     side:THREE.DoubleSide
                     });
@@ -62,6 +77,46 @@ export class Materials{
                     opacity: 0.3,
                     transparent: true,});
         return _mDepthMaterial;
+      }
+
+      mPointMaterial(){
+        _mPointMaterial = new THREE.PointsMaterial({
+                     color: 0x000000,
+                    });
+        return _mPointMaterial;
+      }
+
+      mLambertMaterial(){
+        _mLambertMaterial = new THREE.MeshLambertMaterial({
+                    side:THREE.DoubleSide,
+                     color: 0x03b7fa,
+                     emisive:0xE38949,
+                     emisiveIntensity:1
+                    });
+        return _mLambertMaterial;
+      }
+
+      mPhongMaterial(){
+        _mPhongMaterial = new THREE.MeshPhongMaterial({
+                    side:THREE.DoubleSide,
+                     color: 0x03b7fa,
+                     emisive:0xE38949,
+                     emisiveIntensity:1,
+                     shininess:100
+                    });
+        return _mPhongMaterial;
+      }
+      mStandardMaterial(){
+        _mStandardMaterial = new THREE.MeshPhongMaterial({
+                    side:THREE.DoubleSide,
+                     color: 0x03b7fa,
+                      opacity: 0.5,
+                    transparent: true,
+                     emisive:0xE38949,
+                     emisiveIntensity:0.3,
+                     metalness:1
+                    });
+        return _mStandardMaterial;
       }
 
 
