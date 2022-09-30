@@ -9,86 +9,80 @@ let _pile = new Array();
 
 const basic_material = new Materials(8);
 
-export class Octahedron{ 
+export class Octahedron{
     constructor(A,B,C,D,E) {
 
-let _geoRandom = new THREE.BufferGeometry()
-const points = [
+      let _geoRandom = new THREE.BufferGeometry()
+      const points = [
 
-    
-   
-    new THREE.Vector3(-A,-A,0),//
-    new THREE.Vector3(-D,D,0),//
-     new THREE.Vector3(0,0,E),//
-
-    
-    new THREE.Vector3(-A,-A,0),//
-    new THREE.Vector3(B,-B,0),//
-    new THREE.Vector3(0,0,E),//
-   
-    new THREE.Vector3(B,-B,0),//
-    new THREE.Vector3(C,C,0),//
-    new THREE.Vector3(0,0,E),//
-     
-
-    new THREE.Vector3(C,C,0),//
-    new THREE.Vector3(-D,D,0),//
-    new THREE.Vector3(0,0,E),//
+        new THREE.Vector3(-A,-A,0),//
+        new THREE.Vector3(-D,D,0),//
+        new THREE.Vector3(0,0,E),//
 
 
-    //////
+        new THREE.Vector3(-A,-A,0),//
+        new THREE.Vector3(B,-B,0),//
+        new THREE.Vector3(0,0,E),//
+
+        new THREE.Vector3(B,-B,0),//
+        new THREE.Vector3(C,C,0),//
+        new THREE.Vector3(0,0,E),//
 
 
-    new THREE.Vector3(-A,-A,0),//
-    new THREE.Vector3(-D,D,0),//
-     new THREE.Vector3(0,0,-E),//
-
-    
-    new THREE.Vector3(-A,-A,0),//
-    new THREE.Vector3(B,-B,0),//
-    new THREE.Vector3(0,0,-E),//
-   
-    new THREE.Vector3(B,-B,0),//
-    new THREE.Vector3(C,C,0),//
-    new THREE.Vector3(0,0,-E),//
-     
-
-    new THREE.Vector3(C,C,0),//
-    new THREE.Vector3(-D,D,0),//
-    new THREE.Vector3(0,0,-E),//
-
-  
+        new THREE.Vector3(C,C,0),//
+        new THREE.Vector3(-D,D,0),//
+        new THREE.Vector3(0,0,E),//
 
 
-]
+      //////
 
-_geoRandom.setFromPoints(points)
-_geoRandom.computeVertexNormals()
 
- _randomMesh = new THREE.Mesh(_geoRandom, basic_material);
+        new THREE.Vector3(-A,-A,0),//
+        new THREE.Vector3(-D,D,0),//
+        new THREE.Vector3(0,0,-E),//
 
-        _randomMesh.position.x = 0;
-        _randomMesh.position.y = 0;
-        _randomMesh.position.z = 0;
- 
-        
-       
+
+        new THREE.Vector3(-A,-A,0),//
+        new THREE.Vector3(B,-B,0),//
+        new THREE.Vector3(0,0,-E),//
+
+        new THREE.Vector3(B,-B,0),//
+        new THREE.Vector3(C,C,0),//
+        new THREE.Vector3(0,0,-E),//
+
+
+        new THREE.Vector3(C,C,0),//
+        new THREE.Vector3(-D,D,0),//
+        new THREE.Vector3(0,0,-E),//
+
+    ]
+
+    _geoRandom.setFromPoints(points)
+    _geoRandom.computeVertexNormals()
+
+    _randomMesh = new THREE.Mesh(_geoRandom, basic_material);
+
+    _randomMesh.position.x = 0;
+    _randomMesh.position.y = 0;
+    _randomMesh.position.z = 0;
+
+
+
 
         _pile.push (_randomMesh);
-     
+
       }
 
       createMatrix(){
-          
+
          for(let i of _size){
-            this.constructor(i,i,i,i,i); 
+            this.constructor(i,i,i,i,i);
           }
       }
-    
+
       draw() {
         this.createMatrix();
         return _pile;
-        
+
       }
 }
-  
