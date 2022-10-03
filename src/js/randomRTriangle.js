@@ -8,7 +8,7 @@ let _pile = new Array();
 let fragments = [];
 let ADD = 0.05;
 const dt = 0.02;
-const basic_material = new Materials(7);
+const basic_material = new Materials(3);
 
 class Fragment {
 

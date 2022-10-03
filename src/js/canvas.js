@@ -62,16 +62,18 @@ export class Canvas{
 
 
     animate(){
+      let myInterval;
       document.addEventListener("keydown", event => {
           if(event.key=='k'){
-            window.setInterval(function() {
+          myInterval = window.setInterval(function() {
                 rtrigono.move();
             }, 100);
-
           }
+
       });
         requestAnimationFrame(() =>{
             this.animate();
+              setTimeout(function( ) { clearInterval( myInterval ); }, 40000);
             let ADDX = 0.005;
             let ADDY = 0.002;
 
