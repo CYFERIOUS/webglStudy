@@ -43,7 +43,7 @@ export class Canvas{
     constructor(){
 
         _scene = new THREE.Scene();
-        _scene.background = new THREE.Color( 0x909ead );
+        //_scene.background = new THREE.Color( 0x909ead );
         _camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
         _camera.position.z = 5000;
         _axis = new THREE.AxesHelper( 5000 );
@@ -65,15 +65,24 @@ export class Canvas{
       let myInterval;
       document.addEventListener("keydown", event => {
           if(event.key=='k'){
-          myInterval = window.setInterval(function() {
-                rtrigono.move();
-            }, 100);
+              console.log("kboom");
+              //const delay = 1;
+              const limit = 2;
+              let i = 1;
+              const limitedInterval = setInterval(() => {
+                  rtrigono.move();
+                  if (i > limit) {
+                    clearInterval(limitedInterval);
+                    console.log('interval cleared!');
+                  }
+              },  100);
           }
-
       });
+
+
         requestAnimationFrame(() =>{
             this.animate();
-              setTimeout(function( ) { clearInterval( myInterval ); }, 40000);
+
             let ADDX = 0.005;
             let ADDY = 0.002;
 
@@ -199,18 +208,58 @@ export class Canvas{
 
               }
         });
+        document.addEventListener("keydown", event => {
+            switch(event.key){
+              case 'a':
+
+              break;
+              case 'b':
+
+              break;
+              case 'c':
+
+              break;
+              case 'd':
+
+              break;
+              case 'e':
+                    this.spot_Light();
+              break;
 
 
-        _scene.add( _light.bulb1 );
-        _scene.add( _light.bulb2 );
-        _scene.add( _light.bulb3 );
-        _scene.add( _light.bulb4 );
+            }
+        });
+
+        //_scene.add( _light.bulb1 );
+        //_scene.add( _light.bulb2 );
+        /*_scene.add( _light.bulb3 );
+        _scene.add( _light.bulb4 );*/
+
 
         _renderer = new THREE.WebGLRenderer();
         _renderer.setSize( window.innerWidth, window.innerHeight );
         _rDomELement = _renderer.domElement;
         document.body.appendChild( _rDomELement );
 
+
+    }
+    ambient_Light(){}
+    hemisphere_Light(){}
+    directional_Light(){}
+    point_Light(){}
+    spot_Light(){
+      _scene.add( _light.bulb5[0] );
+      _scene.add( _light.bulb5[1] );
+      _scene.add( _light.bulb5[2] );
+      _scene.add( _light.bulb5[3] );
+      const spotLightHelper = new THREE.SpotLightHelper( _light.bulb5[0] );
+      //_scene.add( spotLightHelper );
+      const spotLightHelper2 = new THREE.SpotLightHelper( _light.bulb5[1] );
+      //_scene.add( spotLightHelper2 );
+      const spotLightHelper3 = new THREE.SpotLightHelper( _light.bulb5[2] );
+      //_scene.add( spotLightHelper3 );
+      const spotLightHelper4 = new THREE.SpotLightHelper( _light.bulb5[3] );
+      //_scene.add( spotLightHelper4 );
 
     }
 
