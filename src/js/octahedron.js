@@ -7,7 +7,7 @@ let _size = new Array(100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,14
 let _pile = new Array();
 
 
-const basic_material = new Materials(8);
+const basic_material = new Materials(3);
 
 export class Octahedron{
     constructor(A,B,C,D,E) {

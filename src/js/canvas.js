@@ -37,13 +37,15 @@ const octahedron = new Octahedron(100,100,100,100,100);
 const rtrigono = new RandomTriangle(1000,1000,1000);
 const planicie = new Plane(10000,10000,10,10);
 const lighting = new Light();
-
+const pointLightHelper = [];
+let dLightHelper1, dLightHelper2;
+let theta = 0;
 export class Canvas{
 
     constructor(){
 
         _scene = new THREE.Scene();
-        //_scene.background = new THREE.Color( 0x909ead );
+        _scene.background = new THREE.Color( 0x909ead );
         _camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
         _camera.position.z = 5000;
         _axis = new THREE.AxesHelper( 5000 );
@@ -112,6 +114,21 @@ export class Canvas{
 
                 }
 
+
+
+                  for (let i in _light.bulb4){
+                    const quaternion = new THREE.Quaternion();
+                    quaternion.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), theta );
+                    _light.bulb4[i].applyQuaternion(quaternion);
+                    _light.bulb4[i].applyQuaternion(quaternion);
+                    _light.bulb4[0].position.x = 3000*Math.sin(theta);
+                    _light.bulb4[0].position.z = 3000*Math.cos(theta);
+                    _light.bulb4[1].position.x = -3000*Math.sin(theta);
+                    _light.bulb4[1].position.z = 3000*Math.cos(theta);
+                    theta += ADDX;
+                  }
+
+
                 for (let i in normals){
                     normals[i].update();
 
@@ -129,6 +146,7 @@ export class Canvas{
 
 
     draw() {
+        //_scene.add(_axis)
         this.primitiveAdder(true,_cubo);
         _currentGeo = _cubo;
         document.addEventListener("keydown", event => {
@@ -208,33 +226,28 @@ export class Canvas{
 
               }
         });
+        //lights switch
         document.addEventListener("keydown", event => {
             switch(event.key){
               case 'a':
-
+                  this.ambient_Lights();
               break;
               case 'b':
-
+                  this.hemisphere_Lights();
               break;
               case 'c':
-
+                this.directional_Lights();
               break;
               case 'd':
-
+                  this.point_Lights();
               break;
               case 'e':
-                    this.spot_Light();
+                    this.spot_Lights();
               break;
 
 
             }
         });
-
-        //_scene.add( _light.bulb1 );
-        //_scene.add( _light.bulb2 );
-        /*_scene.add( _light.bulb3 );
-        _scene.add( _light.bulb4 );*/
-
 
         _renderer = new THREE.WebGLRenderer();
         _renderer.setSize( window.innerWidth, window.innerHeight );
@@ -243,23 +256,62 @@ export class Canvas{
 
 
     }
-    ambient_Light(){}
-    hemisphere_Light(){}
-    directional_Light(){}
-    point_Light(){}
-    spot_Light(){
+    ambient_Lights(){
+        _scene.add( _light.bulb1 );
+        _scene.remove( _light.bulb2 );
+        _scene.remove( _light.bulb3 );
+        _scene.remove( _light.bulb4 );
+        _scene.remove( _light.bulb5 );
+    }
+    hemisphere_Lights(){
+          _scene.add( _light.bulb2 );
+          _scene.remove( _light.bulb1 );
+          _scene.remove( _light.bulb3 );
+          _scene.remove( _light.bulb4 );
+          _scene.remove( _light.bulb5 );
+    }
+    directional_Lights(){
+        _scene.add( _light.bulb3[0] );
+        _scene.add( _light.bulb3[1] );
+         dLightHelper1 = new THREE.DirectionalLightHelper( _light.bulb3[0], 800, 0x000000 );
+        _scene.add( dLightHelper1 );
+         dLightHelper2 = new THREE.DirectionalLightHelper( _light.bulb3[1], 800, 0x000000 );
+         _scene.add( dLightHelper2 );
+         _scene.remove( _light.bulb2 );
+         _scene.remove( _light.bulb1 );
+
+         _scene.remove( _light.bulb4 );
+         _scene.remove( _light.bulb5 );
+    }
+    point_Lights(){
+      _scene.add( _light.bulb4[0] );
+      _scene.add( _light.bulb4[1] );
+     pointLightHelper[0] = new THREE.PointLightHelper( _light.bulb4[0], 300 );
+     pointLightHelper[1] = new THREE.PointLightHelper( _light.bulb4[1], 300 );
+      _scene.add( pointLightHelper[0] );
+      _scene.add( pointLightHelper[1] );
+      _scene.remove( _light.bulb2 );
+      _scene.remove( _light.bulb3 );
+      _scene.remove( _light.bulb1 );
+      _scene.remove( _light.bulb5 );
+    }
+    spot_Lights(){
       _scene.add( _light.bulb5[0] );
       _scene.add( _light.bulb5[1] );
       _scene.add( _light.bulb5[2] );
       _scene.add( _light.bulb5[3] );
       const spotLightHelper = new THREE.SpotLightHelper( _light.bulb5[0] );
-      //_scene.add( spotLightHelper );
+      _scene.add( spotLightHelper );
       const spotLightHelper2 = new THREE.SpotLightHelper( _light.bulb5[1] );
-      //_scene.add( spotLightHelper2 );
+      _scene.add( spotLightHelper2 );
       const spotLightHelper3 = new THREE.SpotLightHelper( _light.bulb5[2] );
-      //_scene.add( spotLightHelper3 );
+      _scene.add( spotLightHelper3 );
       const spotLightHelper4 = new THREE.SpotLightHelper( _light.bulb5[3] );
-      //_scene.add( spotLightHelper4 );
+      _scene.add( spotLightHelper4 );
+      _scene.remove( _light.bulb2 );
+      _scene.remove( _light.bulb3 );
+      _scene.remove( _light.bulb4 );
+      _scene.remove( _light.bulb1 );
 
     }
 
