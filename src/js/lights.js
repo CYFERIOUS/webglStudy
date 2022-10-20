@@ -55,7 +55,12 @@ export class Light{
 	}
 
 	hemisphereLight(){
-			return _hemiSphere = new THREE.HemisphereLight(0xF0D438,0x7B3DEB,0.9);
+			_hemiSphere = new THREE.HemisphereLight(0xF0D438,0x7B3DEB,0.9);
+			_hemiSphere.position.x = 0;
+			_hemiSphere.position.y = 3000;
+			_hemiSphere.position.z = 0;
+			return _hemiSphere;
+
 	}
 	directionalLight(color, px, py,pz){
 

@@ -38,7 +38,7 @@ const rtrigono = new RandomTriangle(1000,1000,1000);
 const planicie = new Plane(10000,10000,10,10);
 const lighting = new Light();
 const pointLightHelper = [];
-let dLightHelper1, dLightHelper2;
+let dLightHelper1, dLightHelper2,hemiHelper,spotLightHelper,spotLightHelper2,spotLightHelper3,spotLightHelper4;
 let theta = 0;
 export class Canvas{
 
@@ -258,17 +258,45 @@ export class Canvas{
     }
     ambient_Lights(){
         _scene.add( _light.bulb1 );
-        _scene.remove( _light.bulb2 );
-        _scene.remove( _light.bulb3 );
-        _scene.remove( _light.bulb4 );
-        _scene.remove( _light.bulb5 );
+
+        _scene.remove(_light.bulb2);
+        this.removeLights(_light.bulb3);
+        this.removeLights(_light.bulb3);
+        this.removeLights(_light.bulb4);
+        this.removeLights(_light.bulb5);
+
+        this.removeHelper(hemiHelper);
+        this.removeHelper(dLightHelper1);
+        this.removeHelper(dLightHelper2);
+        this.removeHelper(pointLightHelper[0]);
+        this.removeHelper(pointLightHelper[1]);
+        this.removeHelper(spotLightHelper);
+        this.removeHelper(spotLightHelper2);
+        this.removeHelper(spotLightHelper3);
+        this.removeHelper(spotLightHelper4);
+
+
     }
     hemisphere_Lights(){
           _scene.add( _light.bulb2 );
-          _scene.remove( _light.bulb1 );
-          _scene.remove( _light.bulb3 );
-          _scene.remove( _light.bulb4 );
-          _scene.remove( _light.bulb5 );
+          hemiHelper = new THREE.HemisphereLightHelper( _light.bulb2, 300 );
+          _scene.add( hemiHelper );
+
+          _scene.remove(_light.bulb1);
+          this.removeLights(_light.bulb3);
+          this.removeLights(_light.bulb4);
+          this.removeLights(_light.bulb5);
+
+          this.removeHelper(dLightHelper1);
+          this.removeHelper(dLightHelper2);
+          this.removeHelper(pointLightHelper[0]);
+          this.removeHelper(pointLightHelper[1]);
+          this.removeHelper(spotLightHelper);
+          this.removeHelper(spotLightHelper2);
+          this.removeHelper(spotLightHelper3);
+          this.removeHelper(spotLightHelper4);
+
+
     }
     directional_Lights(){
         _scene.add( _light.bulb3[0] );
@@ -277,11 +305,20 @@ export class Canvas{
         _scene.add( dLightHelper1 );
          dLightHelper2 = new THREE.DirectionalLightHelper( _light.bulb3[1], 800, 0x000000 );
          _scene.add( dLightHelper2 );
-         _scene.remove( _light.bulb2 );
-         _scene.remove( _light.bulb1 );
 
-         _scene.remove( _light.bulb4 );
-         _scene.remove( _light.bulb5 );
+         _scene.remove(_light.bulb1);
+         _scene.remove(_light.bulb2);
+         this.removeLights(_light.bulb4);
+         this.removeLights(_light.bulb5);
+
+         this.removeHelper(hemiHelper);
+         this.removeHelper(pointLightHelper[0]);
+         this.removeHelper(pointLightHelper[1]);
+         this.removeHelper(spotLightHelper);
+         this.removeHelper(spotLightHelper2);
+         this.removeHelper(spotLightHelper3);
+         this.removeHelper(spotLightHelper4);
+
     }
     point_Lights(){
       _scene.add( _light.bulb4[0] );
@@ -290,29 +327,57 @@ export class Canvas{
      pointLightHelper[1] = new THREE.PointLightHelper( _light.bulb4[1], 300 );
       _scene.add( pointLightHelper[0] );
       _scene.add( pointLightHelper[1] );
-      _scene.remove( _light.bulb2 );
-      _scene.remove( _light.bulb3 );
-      _scene.remove( _light.bulb1 );
-      _scene.remove( _light.bulb5 );
+
+      _scene.remove(_light.bulb1);
+      _scene.remove(_light.bulb2);
+      this.removeLights(_light.bulb3);
+      this.removeLights(_light.bulb5);
+
+      this.removeHelper(hemiHelper);
+      this.removeHelper(dLightHelper1);
+      this.removeHelper(dLightHelper2);
+      this.removeHelper(spotLightHelper);
+      this.removeHelper(spotLightHelper2);
+      this.removeHelper(spotLightHelper3);
+      this.removeHelper(spotLightHelper4);
+
     }
     spot_Lights(){
       _scene.add( _light.bulb5[0] );
       _scene.add( _light.bulb5[1] );
       _scene.add( _light.bulb5[2] );
       _scene.add( _light.bulb5[3] );
-      const spotLightHelper = new THREE.SpotLightHelper( _light.bulb5[0] );
-      _scene.add( spotLightHelper );
-      const spotLightHelper2 = new THREE.SpotLightHelper( _light.bulb5[1] );
-      _scene.add( spotLightHelper2 );
-      const spotLightHelper3 = new THREE.SpotLightHelper( _light.bulb5[2] );
-      _scene.add( spotLightHelper3 );
-      const spotLightHelper4 = new THREE.SpotLightHelper( _light.bulb5[3] );
-      _scene.add( spotLightHelper4 );
-      _scene.remove( _light.bulb2 );
-      _scene.remove( _light.bulb3 );
-      _scene.remove( _light.bulb4 );
-      _scene.remove( _light.bulb1 );
 
+      spotLightHelper = new THREE.SpotLightHelper( _light.bulb5[0] );
+      _scene.add( spotLightHelper );
+      spotLightHelper2 = new THREE.SpotLightHelper( _light.bulb5[1] );
+      _scene.add( spotLightHelper2 );
+      spotLightHelper3 = new THREE.SpotLightHelper( _light.bulb5[2] );
+      _scene.add( spotLightHelper3 );
+      spotLightHelper4 = new THREE.SpotLightHelper( _light.bulb5[3] );
+      _scene.add( spotLightHelper4 );
+
+      _scene.remove(_light.bulb1);
+      _scene.remove(_light.bulb2);
+      this.removeLights(_light.bulb3);
+      this.removeLights(_light.bulb4);
+
+      this.removeHelper(hemiHelper);
+      this.removeHelper(dLightHelper1);
+      this.removeHelper(dLightHelper2);
+      this.removeHelper(pointLightHelper[0]);
+      this.removeHelper(pointLightHelper[1]);
+
+
+
+    }
+    removeHelper(helper){
+      _scene.remove(helper);
+    }
+    removeLights(focus){
+      for(let i in focus){
+        _scene.remove(focus[i]);
+      }
     }
 
     primitiveAdder(active,primitive){
