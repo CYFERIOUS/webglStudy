@@ -146,7 +146,20 @@ export class Canvas{
 
 
     draw() {
-        //_scene.add(_axis)
+        _scene.add(_axis)
+        document.addEventListener("keydown", event => {
+            switch(event.key){
+              case 'o':
+                _camera = new THREE.OrthographicCamera( window.innerWidth / - 0.3, window.innerWidth / 0.3, window.innerHeight / 0.3, window.innerHeight / - 0.3, 1, 10000 );
+                _camera.position.z = 5000;
+              break;
+              case 'p':
+                _camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+                _camera.position.z = 5000;
+              break;
+            }
+
+        });
         this.primitiveAdder(true,_cubo);
         _currentGeo = _cubo;
         document.addEventListener("keydown", event => {
