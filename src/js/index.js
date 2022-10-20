@@ -10,17 +10,11 @@ class Container{
         c.addMouseHandler();
         c.animate();
     }
-     
+
 }
 
 
-document.addEventListener("DOMContentLoaded", function(event) {     
-    const contain = new Container();      
-
+document.addEventListener("DOMContentLoaded", function(event) {
+    const contain = new Container();
+    document.body.style.overflow = 'hidden';
 });
-
-
-
-
-
-   

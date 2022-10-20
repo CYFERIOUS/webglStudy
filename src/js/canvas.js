@@ -40,6 +40,7 @@ const lighting = new Light();
 const pointLightHelper = [];
 let dLightHelper1, dLightHelper2,hemiHelper,spotLightHelper,spotLightHelper2,spotLightHelper3,spotLightHelper4;
 let theta = 0;
+let gamma = 0;
 export class Canvas{
 
     constructor(){
@@ -114,8 +115,6 @@ export class Canvas{
 
                 }
 
-
-
                   for (let i in _light.bulb4){
                     const quaternion = new THREE.Quaternion();
                     quaternion.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), theta );
@@ -134,8 +133,6 @@ export class Canvas{
 
                 }
 
-
-
             }
             _renderer.render( _scene, _camera );
         });
@@ -143,132 +140,156 @@ export class Canvas{
 
 
 
+   cameraSwitcher(){
+     let CDDX = 0.005;
+     document.addEventListener("keydown", event => {
+         switch(event.key){
+           case 'o':
+             _camera = new THREE.OrthographicCamera( window.innerWidth / - 0.3, window.innerWidth / 0.3, window.innerHeight / 0.3, window.innerHeight / - 0.3, 1, 10000 );
+             _camera.position.z = 5000;
+           break;
+           case 'p':
+             _camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+             _camera.position.z = 5000;
+           break;
+           case 'ArrowUp':
+             _camera.position.y = 5000 * Math.cos(gamma);
+             _camera.position.z = 5000 * Math.sin(gamma);
+             _camera.lookAt(0,0,0);
+             _camera.updateProjectionMatrix();
+             gamma += CDDX;
+           break;
+           case 'ArrowDown':
+             _camera.position.y = 5000 * Math.cos(gamma);
+             _camera.position.z = 5000 * Math.sin(gamma);
+             _camera.lookAt(0,0,0);
+             _camera.updateProjectionMatrix();
+             gamma -= CDDX;
+           break;
+           case 'ArrowRight':
+              _camera.position.x = 5000 * Math.cos(gamma);
+              _camera.position.z = 5000 * Math.sin(gamma);
+              _camera.lookAt(0,0,0);
+              _camera.updateProjectionMatrix();
+              gamma += CDDX;
+           break;
+           case 'ArrowLeft':
+              _camera.position.x = 5000 * Math.cos(gamma);
+              _camera.position.z = 5000 * Math.sin(gamma);
+              _camera.lookAt(0,0,0);
+              _camera.updateProjectionMatrix();
+              gamma -= CDDX;
+           break;
+
+         }
+
+     });
+   }
+
+   geometrySwitcher(){
+     this.primitiveAdder(true,_cubo);
+     _currentGeo = _cubo;
+     document.addEventListener("keydown", event => {
+         switch(event.key){
+             case '1':
+                 this.normalsAdder(false,_currentGeo);
+                 _currentGeo = _cubo;
+                 this.primitiveAdder(true,_cubo);
+                 this.primitiveAdder(false,_sphere);
+                 this.primitiveAdder(false,_torus);
+                 this.primitiveAdder(false,_octahedron);
+                 this.primitiveAdder(false,_geoRand);
+                 this.primitiveAdder(false,_rt);
+                 this.normalsAdder(activeNormals,_currentGeo);
+                 activeNormals = !activeNormals;
+             break;
+             case '2':
+                 this.normalsAdder(false,_currentGeo);
+                 _currentGeo = _sphere;
+                 this.primitiveAdder(false,_cubo);
+                 this.primitiveAdder(true,_sphere);
+                 this.primitiveAdder(false,_torus);
+                 this.primitiveAdder(false,_octahedron);
+                 this.primitiveAdder(false,_geoRand);
+                 this.primitiveAdder(false,_rt);
+                 this.normalsAdder(activeNormals,_currentGeo);
+                 activeNormals = !activeNormals;
+             break;
+             case '3':
+                 this.normalsAdder(false,_currentGeo);
+                 _currentGeo = _torus;
+                 this.primitiveAdder(false,_cubo);
+                 this.primitiveAdder(false,_sphere);
+                 this.primitiveAdder(true,_torus);
+                 this.primitiveAdder(false,_octahedron);
+                 this.primitiveAdder(false,_rt);
+                 this.primitiveAdder(false,_geoRand);
+                 this.normalsAdder(activeNormals,_currentGeo);
+                 activeNormals = !activeNormals;
+             break;
+             case '4':
+                 this.normalsAdder(false,_currentGeo);
+                 _currentGeo = _geoRand;
+                 this.primitiveAdder(false,_cubo);
+                 this.primitiveAdder(false,_sphere);
+                 this.primitiveAdder(false,_torus);
+                 this.primitiveAdder(false,_octahedron);
+                 this.primitiveAdder(false,_rt);
+                 this.primitiveAdder(true,_geoRand);
+                 this.normalsAdder(activeNormals,_currentGeo);
+                 activeNormals = !activeNormals;
+             break;
+             case '5':
+                 this.normalsAdder(false,_currentGeo);
+                 _currentGeo = _octahedron;
+                 this.primitiveAdder(false,_cubo);
+                 this.primitiveAdder(false,_sphere);
+                 this.primitiveAdder(false,_torus);
+                 this.primitiveAdder(false,_geoRand);
+                 this.primitiveAdder(false,_rt);
+                 this.primitiveAdder(true,_currentGeo);
+                 this.normalsAdder(activeNormals,_currentGeo);
+                 activeNormals = !activeNormals;
+             break;
+             case '6':
+                 this.normalsAdder(false,_currentGeo);
+                 _currentGeo = _rt;
+                 this.primitiveAdder(false,_cubo);
+                 this.primitiveAdder(false,_sphere);
+                 this.primitiveAdder(false,_torus);
+                 this.primitiveAdder(false,_geoRand);
+                 this.primitiveAdder(false,_octahedron);
+                 this.primitiveAdder(true,_currentGeo);
+                 //this.normalsAdder(activeNormals,_currentGeo);
+                 activeNormals = !activeNormals;
+             break;
+
+           }
+     });
+   }
+   lightSwitcher(){
+     document.addEventListener("keydown", event => {
+         switch(event.key){
+           case 'a':
+               this.ambient_Lights();
+           break;
+           case 'b':
+               this.hemisphere_Lights();
+           break;
+           case 'c':
+             this.directional_Lights();
+           break;
+           case 'd':
+               this.point_Lights();
+           break;
+           case 'e':
+                 this.spot_Lights();
+           break;
+         }
+     });
+   }
 
 
-    draw() {
-        _scene.add(_axis)
-        document.addEventListener("keydown", event => {
-            switch(event.key){
-              case 'o':
-                _camera = new THREE.OrthographicCamera( window.innerWidth / - 0.3, window.innerWidth / 0.3, window.innerHeight / 0.3, window.innerHeight / - 0.3, 1, 10000 );
-                _camera.position.z = 5000;
-              break;
-              case 'p':
-                _camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-                _camera.position.z = 5000;
-              break;
-            }
-
-        });
-        this.primitiveAdder(true,_cubo);
-        _currentGeo = _cubo;
-        document.addEventListener("keydown", event => {
-            switch(event.key){
-                case '1':
-                    this.normalsAdder(false,_currentGeo);
-                    _currentGeo = _cubo;
-                    this.primitiveAdder(true,_cubo);
-                    this.primitiveAdder(false,_sphere);
-                    this.primitiveAdder(false,_torus);
-                    this.primitiveAdder(false,_octahedron);
-                    this.primitiveAdder(false,_geoRand);
-                    this.primitiveAdder(false,_rt);
-                    this.normalsAdder(activeNormals,_currentGeo);
-                    activeNormals = !activeNormals;
-                break;
-                case '2':
-                    this.normalsAdder(false,_currentGeo);
-                    _currentGeo = _sphere;
-                    this.primitiveAdder(false,_cubo);
-                    this.primitiveAdder(true,_sphere);
-                    this.primitiveAdder(false,_torus);
-                    this.primitiveAdder(false,_octahedron);
-                    this.primitiveAdder(false,_geoRand);
-                    this.primitiveAdder(false,_rt);
-                    this.normalsAdder(activeNormals,_currentGeo);
-                    activeNormals = !activeNormals;
-                break;
-                case '3':
-                    this.normalsAdder(false,_currentGeo);
-                    _currentGeo = _torus;
-                    this.primitiveAdder(false,_cubo);
-                    this.primitiveAdder(false,_sphere);
-                    this.primitiveAdder(true,_torus);
-                    this.primitiveAdder(false,_octahedron);
-                    this.primitiveAdder(false,_rt);
-                    this.primitiveAdder(false,_geoRand);
-                    this.normalsAdder(activeNormals,_currentGeo);
-                    activeNormals = !activeNormals;
-                break;
-                case '4':
-                    this.normalsAdder(false,_currentGeo);
-                    _currentGeo = _geoRand;
-                    this.primitiveAdder(false,_cubo);
-                    this.primitiveAdder(false,_sphere);
-                    this.primitiveAdder(false,_torus);
-                    this.primitiveAdder(false,_octahedron);
-                    this.primitiveAdder(false,_rt);
-                    this.primitiveAdder(true,_geoRand);
-                    this.normalsAdder(activeNormals,_currentGeo);
-                    activeNormals = !activeNormals;
-                break;
-                case '5':
-                    this.normalsAdder(false,_currentGeo);
-                    _currentGeo = _octahedron;
-                    this.primitiveAdder(false,_cubo);
-                    this.primitiveAdder(false,_sphere);
-                    this.primitiveAdder(false,_torus);
-                    this.primitiveAdder(false,_geoRand);
-                    this.primitiveAdder(false,_rt);
-                    this.primitiveAdder(true,_currentGeo);
-                    this.normalsAdder(activeNormals,_currentGeo);
-                    activeNormals = !activeNormals;
-                break;
-                case '6':
-                    this.normalsAdder(false,_currentGeo);
-                    _currentGeo = _rt;
-                    this.primitiveAdder(false,_cubo);
-                    this.primitiveAdder(false,_sphere);
-                    this.primitiveAdder(false,_torus);
-                    this.primitiveAdder(false,_geoRand);
-                    this.primitiveAdder(false,_octahedron);
-                    this.primitiveAdder(true,_currentGeo);
-                    //this.normalsAdder(activeNormals,_currentGeo);
-                    activeNormals = !activeNormals;
-                break;
-
-              }
-        });
-        //lights switch
-        document.addEventListener("keydown", event => {
-            switch(event.key){
-              case 'a':
-                  this.ambient_Lights();
-              break;
-              case 'b':
-                  this.hemisphere_Lights();
-              break;
-              case 'c':
-                this.directional_Lights();
-              break;
-              case 'd':
-                  this.point_Lights();
-              break;
-              case 'e':
-                    this.spot_Lights();
-              break;
-
-
-            }
-        });
-
-        _renderer = new THREE.WebGLRenderer();
-        _renderer.setSize( window.innerWidth, window.innerHeight );
-        _rDomELement = _renderer.domElement;
-        document.body.appendChild( _rDomELement );
-
-
-    }
     ambient_Lights(){
         _scene.add( _light.bulb1 );
 
@@ -418,7 +439,17 @@ export class Canvas{
 
     }
 
+    draw() {
+        _scene.add(_axis)
+        this.cameraSwitcher();
+        this.geometrySwitcher();
+        this.lightSwitcher();
 
+        _renderer = new THREE.WebGLRenderer();
+        _renderer.setSize( window.innerWidth, window.innerHeight );
+        _rDomELement = _renderer.domElement;
+        document.body.appendChild( _rDomELement );
+    }
 
     addMouseHandler(){
         _rDomELement.addEventListener('click',this.onMouseUp,false);
