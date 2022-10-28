@@ -526,11 +526,8 @@ export class Canvas{
             item.object.material.opacity = 0.1;
             item.object.position.z = 3000;
             item.object.rotation.z = 45;
-
-
           //_scene.remove(item.object);
         //  item.object.position.x = item.object.position.x + x;
-
           console.log(item.object);
           console.log(i);
         });*/
