@@ -41,16 +41,25 @@ const pointLightHelper = [];
 let dLightHelper1, dLightHelper2,hemiHelper,spotLightHelper,spotLightHelper2,spotLightHelper3,spotLightHelper4;
 let theta = 0;
 let gamma = 0;
+let ball;
+let cameraBall;
 export class Canvas{
 
     constructor(){
 
         _scene = new THREE.Scene();
-        _scene.background = new THREE.Color( 0x909ead );
+        //_scene.background = new THREE.Color( 0x909ead );
         _camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
         _camera.position.z = 5000;
+        const cameraHelper = new THREE.CameraHelper( _camera );
+        //_scene.add( cameraHelper );
         _axis = new THREE.AxesHelper( 5000 );
         _axis.position.set( 0, 0, 0 );
+        //_scene.add(_axis);
+
+        _scene.add(_camera);
+
+
         _cubo = cube.draw();
         _geoRand = randomShape.draw();
         _sphere = sphere.draw();
@@ -114,23 +123,19 @@ export class Canvas{
                     _octahedron[i].rotation.y += (ADDY*i);
 
                 }
-
-                  for (let i in _light.bulb4){
-                    const quaternion = new THREE.Quaternion();
-                    quaternion.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), theta );
-                    _light.bulb4[i].applyQuaternion(quaternion);
-                    _light.bulb4[i].applyQuaternion(quaternion);
-                    _light.bulb4[0].position.x = 3000*Math.sin(theta);
-                    _light.bulb4[0].position.z = 3000*Math.cos(theta);
-                    _light.bulb4[1].position.x = -3000*Math.sin(theta);
-                    _light.bulb4[1].position.z = 3000*Math.cos(theta);
-                    theta += ADDX;
-                  }
-
-
+                for (let i in _light.bulb4){
+                  const quaternion = new THREE.Quaternion();
+                  quaternion.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), theta );
+                  _light.bulb4[i].applyQuaternion(quaternion);
+                  _light.bulb4[i].applyQuaternion(quaternion);
+                  _light.bulb4[0].position.x = 3000*Math.sin(theta);
+                  _light.bulb4[0].position.z = 3000*Math.cos(theta);
+                  _light.bulb4[1].position.x = -3000*Math.sin(theta);
+                  _light.bulb4[1].position.z = 3000*Math.cos(theta);
+                  theta += ADDX;
+                }
                 for (let i in normals){
                     normals[i].update();
-
                 }
 
             }
@@ -153,18 +158,19 @@ export class Canvas{
              _camera.position.z = 5000;
            break;
            case 'ArrowUp':
-             _camera.position.y = 5000 * Math.cos(gamma);
-             _camera.position.z = 5000 * Math.sin(gamma);
+
+            _camera.position.y = 5000 * Math.cos(gamma/2);
+            _camera.position.z = 5000 * Math.sin(gamma/2);
+            _camera.lookAt(0,0,0);
+             _camera.updateProjectionMatrix();
+             gamma -= CDDX;
+           break;
+           case 'ArrowDown':
+             _camera.position.y = 5000 * Math.cos(gamma/2);
+             _camera.position.z = 5000 * Math.sin(gamma/2);
              _camera.lookAt(0,0,0);
              _camera.updateProjectionMatrix();
              gamma += CDDX;
-           break;
-           case 'ArrowDown':
-             _camera.position.y = 5000 * Math.cos(gamma);
-             _camera.position.z = 5000 * Math.sin(gamma);
-             _camera.lookAt(0,0,0);
-             _camera.updateProjectionMatrix();
-             gamma -= CDDX;
            break;
            case 'ArrowRight':
               _camera.position.x = 5000 * Math.cos(gamma);
@@ -289,6 +295,14 @@ export class Canvas{
      });
    }
 
+    animationSwitcher(){
+      document.addEventListener("keydown", event => {
+          if(event.key == ' '){
+            //alert("llamao")
+            _animating = !_animating;
+          }
+      });
+    }
 
     ambient_Lights(){
         _scene.add( _light.bulb1 );
@@ -440,11 +454,11 @@ export class Canvas{
     }
 
     draw() {
-        _scene.add(_axis)
+        //_scene.add(_axis)
         this.cameraSwitcher();
         this.geometrySwitcher();
         this.lightSwitcher();
-
+        this.animationSwitcher();
         _renderer = new THREE.WebGLRenderer();
         _renderer.setSize( window.innerWidth, window.innerHeight );
         _rDomELement = _renderer.domElement;
@@ -452,13 +466,78 @@ export class Canvas{
     }
 
     addMouseHandler(){
-        _rDomELement.addEventListener('click',this.onMouseUp,false);
+        _rDomELement.addEventListener('mousedown',this.onMouseDown,false);
+        _rDomELement.addEventListener('mousemove',this.onMouseMove,false);
+        _rDomELement.addEventListener('mouseup',this.onMouseUp,false);
+    }
+    onMouseMove(){
+
+    }
+    onMouseUp(){
+      for(let i in _currentGeo){
+        _currentGeo[i].position.x = 0;
+        _currentGeo[i].position.y = 0;
+        _currentGeo[i].position.z = 0;
+        _currentGeo[i].scale.x = 1;
+        _currentGeo[i].scale.y = 1;
+        _currentGeo[i].scale.z = 1;
+        _currentGeo[i].rotation.z = 0;
+      }
     }
 
 
-    onMouseUp(event){
+    onMouseDown(event){
         event.preventDefault();
-        _animating = !_animating;
+
+        let x = event.clientX;
+        let y = event.clientY;
+        let mouse = {};
+        mouse.x = (x/window.innerWidth)*2-1;
+        mouse.y = -(y/window.innerHeight)*2+1;
+        mouse.z = 1;
+        //console.log('x'+mouse.x);
+        //console.log('y'+mouse.y);
+        for(let i in _currentGeo){
+          _currentGeo[i].position.x = mouse.x*1000;
+          _currentGeo[i].position.y = mouse.y*1000;
+          _currentGeo[i].position.z = mouse.z*1000;
+          _currentGeo[i].scale.x = 1.3;
+          _currentGeo[i].scale.y = 1.3;
+          _currentGeo[i].scale.z = 1.3;
+
+
+        }
+        let rayCast = new THREE.Raycaster();
+        rayCast.setFromCamera(mouse,_camera);
+         let rayo = rayCast.ray;
+         let valor = rayo.at(1000,new THREE.Vector3( 0, 0, 1 ));
+        console.log(valor);
+        var color = '#'+Math.floor(Math.random()*0xffffff).toString(16).toUpperCase();
+        const light = new THREE.PointLight( color , 10, 5000, 2 );
+        light.power = (100 * (9*3.1416));
+        light.position.set( valor.x,valor.y,valor.z );
+        let ph = new THREE.PointLightHelper( light, 5 );
+        _scene.add(ph);
+        _scene.add( light );
+        //_scene.add(_light.bulb4[0].position.set(valor));
+        /*let intersectos = rayCast.intersectObjects(_scene.children);
+        console.log(intersectos);
+        intersectos.forEach((item, i) => {
+            item.object.material.opacity = 0.1;
+            item.object.position.z = 3000;
+            item.object.rotation.z = 45;
+
+
+          //_scene.remove(item.object);
+        //  item.object.position.x = item.object.position.x + x;
+
+          console.log(item.object);
+          console.log(i);
+        });*/
+
+        //
     }
+
+
 
 }
