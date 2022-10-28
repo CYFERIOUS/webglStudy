@@ -523,7 +523,6 @@ export class Canvas{
         let ph = new THREE.PointLightHelper( light, 5 );
         _scene.add(ph);
         const textureLoader = new THREE.TextureLoader();
-const myIcon = new Image();
         const textureFlare0 = textureLoader.load( img1 );
         const textureFlare1 = textureLoader.load( img2 );
         const textureFlare2 = textureLoader.load( img3 );
