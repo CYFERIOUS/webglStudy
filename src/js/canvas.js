@@ -9,7 +9,10 @@ import {RandomTriangle} from './randomRTriangle.js';
 import {Plane} from './plane.js';
 import {Light} from './lights.js';
 import { VertexNormalsHelper } from '../../node_modules/three/examples/jsm/helpers/VertexNormalsHelper.js';
-
+import { Lensflare, LensflareElement } from '../../node_modules/three/examples/jsm/objects/Lensflare.js';
+import img1 from '../images/lensflare0.png';
+import img2 from '../images/lensflare2.png';
+import img3 from '../images/lensflare2.png';
 
 let _scene;
 let _camera;
@@ -510,7 +513,8 @@ export class Canvas{
         let rayCast = new THREE.Raycaster();
         rayCast.setFromCamera(mouse,_camera);
          let rayo = rayCast.ray;
-         let valor = rayo.at(1000,new THREE.Vector3( 0, 0, 1 ));
+         let rango = Math.floor(Math.random() * (2000 - (-2000))) + (-2000);
+         let valor = rayo.at(rango,new THREE.Vector3( 0, 0, 1 ));
         console.log(valor);
         var color = '#'+Math.floor(Math.random()*0xffffff).toString(16).toUpperCase();
         const light = new THREE.PointLight( color , 10, 5000, 2 );
@@ -518,6 +522,19 @@ export class Canvas{
         light.position.set( valor.x,valor.y,valor.z );
         let ph = new THREE.PointLightHelper( light, 5 );
         _scene.add(ph);
+        const textureLoader = new THREE.TextureLoader();
+const myIcon = new Image();
+        const textureFlare0 = textureLoader.load( img1 );
+        const textureFlare1 = textureLoader.load( img2 );
+        const textureFlare2 = textureLoader.load( img3 );
+
+        const lensflare = new Lensflare();
+
+        lensflare.addElement( new LensflareElement( textureFlare0, 512, 0 ) );
+        lensflare.addElement( new LensflareElement( textureFlare1, 512, 0 ) );
+        lensflare.addElement( new LensflareElement( textureFlare2, 60, 0.6 ) );
+
+        light.add( lensflare );
         _scene.add( light );
         //_scene.add(_light.bulb4[0].position.set(valor));
         /*let intersectos = rayCast.intersectObjects(_scene.children);
