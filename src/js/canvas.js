@@ -10,10 +10,12 @@ import {Plane} from './plane.js';
 import {Light} from './lights.js';
 import { VertexNormalsHelper } from '../../node_modules/three/examples/jsm/helpers/VertexNormalsHelper.js';
 import { Lensflare, LensflareElement } from '../../node_modules/three/examples/jsm/objects/Lensflare.js';
+import { FBXLoader } from '../../node_modules/three/examples/jsm/loaders/FBXLoader.js';
 import img1 from '../images/lensflare0.png';
 import img2 from '../images/lensflare2.png';
 import img3 from '../images/lensflare2.png';
-
+import objTest from '../models/nave.fbx';
+let model;
 let _scene;
 let _camera;
 let _renderer;
@@ -51,7 +53,7 @@ export class Canvas{
     constructor(){
 
         _scene = new THREE.Scene();
-        //_scene.background = new THREE.Color( 0x909ead );
+        _scene.background = new THREE.Color( 0x909ead );
         _camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
         _camera.position.z = 5000;
         const cameraHelper = new THREE.CameraHelper( _camera );
@@ -74,7 +76,58 @@ export class Canvas{
 
     }
 
+loadObj(){
+const loader = new FBXLoader();
+console.log("objTest");
+console.log(objTest);
 
+let objectMaterial;
+loader.load(
+	// resource URL
+	objTest,
+	// called when resource is loaded
+	 ( object )=> {
+
+
+    object.position.x = 0;
+    object.position.y = 0;
+    object.position.z = 0;
+
+
+
+    objectMaterial = new THREE.MeshPhongMaterial({
+                color: 0x03b7fa,
+                wireframe:false,
+                opacity: 1
+                });
+
+    object.traverse(function(child) {
+        if (child instanceof THREE.Mesh) {
+            child.material = objectMaterial;
+        }
+    });
+
+    console.log(object);
+
+    model = object;
+    _scene.add( object );
+
+	},
+	// called when loading is in progresses
+	function ( xhr ) {
+
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+	},
+	// called when loading has errors
+	function ( error ) {
+
+		console.log( 'An error happened' );
+    console.log( error );
+
+	}
+);
+}
 
     animate(){
       let myInterval;
@@ -140,6 +193,8 @@ export class Canvas{
                 for (let i in normals){
                     normals[i].update();
                 }
+
+
 
             }
             _renderer.render( _scene, _camera );
@@ -462,6 +517,7 @@ export class Canvas{
         this.geometrySwitcher();
         this.lightSwitcher();
         this.animationSwitcher();
+        this.loadObj();
         _renderer = new THREE.WebGLRenderer();
         _renderer.setSize( window.innerWidth, window.innerHeight );
         _rDomELement = _renderer.domElement;
@@ -513,7 +569,7 @@ export class Canvas{
         let rayCast = new THREE.Raycaster();
         rayCast.setFromCamera(mouse,_camera);
          let rayo = rayCast.ray;
-         let rango = Math.floor(Math.random() * (2000 - (-2000))) + (-2000);
+         let rango = Math.floor(Math.random() * (1000 - (-500)) + (-500));
          let valor = rayo.at(rango,new THREE.Vector3( 0, 0, 1 ));
         console.log(valor);
         var color = '#'+Math.floor(Math.random()*0xffffff).toString(16).toUpperCase();

@@ -6,6 +6,6 @@ module.exports = merge (common,{
   mode: "production",
   output: {
     filename: "main.[hash].js",
-    path: path.resolve(__dirname, "build/js")
+    path: path.resolve(__dirname, "build/"),
   }
 });

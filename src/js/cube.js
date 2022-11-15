@@ -9,11 +9,11 @@ let _pile = new Array();
 const phong_material = new Materials(2);
 
 
-export class Cube{ 
+export class Cube{
     constructor(sizeX,sizeY,sizeZ) {
-      
+
         _geometry = new THREE.BoxGeometry( sizeX, sizeY, sizeZ );
-        
+
 
         _geometro = new THREE.Mesh( _geometry, phong_material  );
         _geometro.position.x = 0;
@@ -21,18 +21,17 @@ export class Cube{
         _geometro.position.z = 0;
 
         _pile.push (_geometro);
-     
+
       }
 
       createMatrix(){
          for(let i of _size){
-            this.constructor(i,i,i); 
+            this.constructor(i,i,i);
           }
       }
-    
+
       draw() {
         this.createMatrix();
         return _pile;
       }
 }
-

@@ -9,9 +9,9 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.js$/,
         include: [path.resolve(__dirname, 'src')],
         loader: 'babel-loader',
-
         options: {
           plugins: ['@babel/plugin-syntax-dynamic-import'],
           presets: [
@@ -22,21 +22,25 @@ module.exports = {
               }
             ]
           ]
-        },
-
-        test: /\.js$/
+        }
       },
       {
         test: /\.scss$/,
         use: ["style-loader", "css-loader", "sass-loader"]
       },
       {
-       test: /\.(png|jpe?g|gif)$/i,
+       test: /\.(png|jpe?g|gif|obj|fbx)$/i,
        use: [
          {
            loader: 'file-loader',
          },
        ],
+     },
+      {
+        test: /\.obj$/,
+         use: [
+           {loader: 'webpack-obj-loader',}
+        ],
      },
     ]
   }
