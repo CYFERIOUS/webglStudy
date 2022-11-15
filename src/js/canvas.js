@@ -10,12 +10,14 @@ import {Plane} from './plane.js';
 import {Light} from './lights.js';
 import { VertexNormalsHelper } from '../../node_modules/three/examples/jsm/helpers/VertexNormalsHelper.js';
 import { Lensflare, LensflareElement } from '../../node_modules/three/examples/jsm/objects/Lensflare.js';
-import { FBXLoader } from '../../node_modules/three/examples/jsm/loaders/FBXLoader.js';
+import { Modeloader} from './modeloader.js'
+
+
 import img1 from '../images/lensflare0.png';
 import img2 from '../images/lensflare2.png';
 import img3 from '../images/lensflare2.png';
-import objTest from '../models/nave.fbx';
-let model;
+
+
 let _scene;
 let _camera;
 let _renderer;
@@ -41,6 +43,7 @@ const randomShape = new RandomGeo(100,100,100,100);
 const octahedron = new Octahedron(100,100,100,100,100);
 const rtrigono = new RandomTriangle(1000,1000,1000);
 const planicie = new Plane(10000,10000,10,10);
+const ship = new Modeloader();
 const lighting = new Light();
 const pointLightHelper = [];
 let dLightHelper1, dLightHelper2,hemiHelper,spotLightHelper,spotLightHelper2,spotLightHelper3,spotLightHelper4;
@@ -76,58 +79,7 @@ export class Canvas{
 
     }
 
-loadObj(){
-const loader = new FBXLoader();
-console.log("objTest");
-console.log(objTest);
 
-let objectMaterial;
-loader.load(
-	// resource URL
-	objTest,
-	// called when resource is loaded
-	 ( object )=> {
-
-
-    object.position.x = 0;
-    object.position.y = 0;
-    object.position.z = 0;
-
-
-
-    objectMaterial = new THREE.MeshPhongMaterial({
-                color: 0x03b7fa,
-                wireframe:false,
-                opacity: 1
-                });
-
-    object.traverse(function(child) {
-        if (child instanceof THREE.Mesh) {
-            child.material = objectMaterial;
-        }
-    });
-
-    console.log(object);
-
-    model = object;
-    _scene.add( object );
-
-	},
-	// called when loading is in progresses
-	function ( xhr ) {
-
-		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-
-	},
-	// called when loading has errors
-	function ( error ) {
-
-		console.log( 'An error happened' );
-    console.log( error );
-
-	}
-);
-}
 
     animate(){
       let myInterval;
@@ -258,6 +210,7 @@ loader.load(
              case '1':
                  this.normalsAdder(false,_currentGeo);
                  _currentGeo = _cubo;
+                 this.shipMaker(false);
                  this.primitiveAdder(true,_cubo);
                  this.primitiveAdder(false,_sphere);
                  this.primitiveAdder(false,_torus);
@@ -271,6 +224,7 @@ loader.load(
                  this.normalsAdder(false,_currentGeo);
                  _currentGeo = _sphere;
                  this.primitiveAdder(false,_cubo);
+                 this.shipMaker(false);
                  this.primitiveAdder(true,_sphere);
                  this.primitiveAdder(false,_torus);
                  this.primitiveAdder(false,_octahedron);
@@ -284,6 +238,7 @@ loader.load(
                  _currentGeo = _torus;
                  this.primitiveAdder(false,_cubo);
                  this.primitiveAdder(false,_sphere);
+                 this.shipMaker(false);
                  this.primitiveAdder(true,_torus);
                  this.primitiveAdder(false,_octahedron);
                  this.primitiveAdder(false,_rt);
@@ -299,6 +254,7 @@ loader.load(
                  this.primitiveAdder(false,_torus);
                  this.primitiveAdder(false,_octahedron);
                  this.primitiveAdder(false,_rt);
+                 this.shipMaker(false);
                  this.primitiveAdder(true,_geoRand);
                  this.normalsAdder(activeNormals,_currentGeo);
                  activeNormals = !activeNormals;
@@ -311,6 +267,7 @@ loader.load(
                  this.primitiveAdder(false,_torus);
                  this.primitiveAdder(false,_geoRand);
                  this.primitiveAdder(false,_rt);
+                 this.shipMaker(false);
                  this.primitiveAdder(true,_currentGeo);
                  this.normalsAdder(activeNormals,_currentGeo);
                  activeNormals = !activeNormals;
@@ -323,9 +280,20 @@ loader.load(
                  this.primitiveAdder(false,_torus);
                  this.primitiveAdder(false,_geoRand);
                  this.primitiveAdder(false,_octahedron);
+                 this.shipMaker(false);
                  this.primitiveAdder(true,_currentGeo);
-                 //this.normalsAdder(activeNormals,_currentGeo);
                  activeNormals = !activeNormals;
+             break;
+             case '7':
+
+             this.primitiveAdder(false,_cubo);
+             this.primitiveAdder(false,_sphere);
+             this.primitiveAdder(false,_torus);
+             this.primitiveAdder(false,_geoRand);
+             this.primitiveAdder(false,_octahedron);
+             this.primitiveAdder(false,_rt);
+             this.shipMaker(true);
+             activeNormals = !activeNormals;
              break;
 
            }
@@ -511,13 +479,29 @@ loader.load(
 
     }
 
+    shipMaker(active){
+      let shipFBX;
+        setTimeout(() => {
+              shipFBX = ship.draw();
+              shipFBX.position.x = 0;
+              shipFBX.position.y = 0;
+              shipFBX.position.z = 0;
+              if(active){
+                _scene.add(shipFBX);
+              }else{
+                _scene.remove(shipFBX);
+              }
+        }, 2000);
+    }
+
     draw() {
         //_scene.add(_axis)
-        this.cameraSwitcher();
-        this.geometrySwitcher();
-        this.lightSwitcher();
-        this.animationSwitcher();
-        this.loadObj();
+
+          this.cameraSwitcher();
+          this.geometrySwitcher();
+          this.lightSwitcher();
+          this.animationSwitcher();
+
         _renderer = new THREE.WebGLRenderer();
         _renderer.setSize( window.innerWidth, window.innerHeight );
         _rDomELement = _renderer.domElement;
