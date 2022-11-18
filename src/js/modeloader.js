@@ -21,6 +21,9 @@ export class Modeloader{
                   }
               });
           //console.log(object);
+          object.scale.x = 0.1;
+          object.scale.y = 0.1;
+          object.scale.z = 0.1;
           model = object;
       	},
       	// called when loading is in progresses

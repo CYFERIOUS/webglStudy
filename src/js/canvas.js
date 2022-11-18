@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import * as TWEEN from '@tweenjs/tween.js';
 
 import {Cube} from './cube.js';
 import {Sphere} from './sphere.js';
@@ -11,6 +12,8 @@ import {Light} from './lights.js';
 import { VertexNormalsHelper } from '../../node_modules/three/examples/jsm/helpers/VertexNormalsHelper.js';
 import { Lensflare, LensflareElement } from '../../node_modules/three/examples/jsm/objects/Lensflare.js';
 import { Modeloader} from './modeloader.js'
+
+import { Raycaster } from './raycaster.js'
 
 
 import img1 from '../images/lensflare0.png';
@@ -51,6 +54,11 @@ let theta = 0;
 let gamma = 0;
 let ball;
 let cameraBall;
+  let mouse = {};
+  let shipFBX;
+  let ray;
+  let photon;
+  let ph;
 export class Canvas{
 
     constructor(){
@@ -81,8 +89,9 @@ export class Canvas{
 
 
 
-    animate(){
+    animate(time){
       let myInterval;
+
       document.addEventListener("keydown", event => {
           if(event.key=='k'){
               console.log("kboom");
@@ -107,30 +116,12 @@ export class Canvas{
             let ADDY = 0.002;
 
             if(_animating){
-                for (let i in _cubo){
-                    _cubo[i].rotation.x += (ADDX*i);
-                    _cubo[i].rotation.y += (ADDY*i);
-
-                }
-                for (let i in _sphere){
-                    _sphere[i].rotation.x += (ADDX*i);
-                    _sphere[i].rotation.y += (ADDY*i);
-                }
-                for (let i in _torus){
-                    _torus[i].rotation.x += (ADDX*i);
-                    _torus[i].rotation.y += (ADDY*i);
-                }
-                for (let i in _geoRand){
-                    _geoRand[i].rotation.x += (ADDX*i);
-                    _geoRand[i].rotation.y += (ADDY*i);
+                for (let i in _currentGeo){
+                    _currentGeo[i].rotation.x += (ADDX*i);
+                    _currentGeo[i].rotation.y += (ADDY*i);
 
                 }
 
-                for (let i in _octahedron){
-                    _octahedron[i].rotation.x += (ADDX*i);
-                    _octahedron[i].rotation.y += (ADDY*i);
-
-                }
                 for (let i in _light.bulb4){
                   const quaternion = new THREE.Quaternion();
                   quaternion.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), theta );
@@ -146,9 +137,20 @@ export class Canvas{
                     normals[i].update();
                 }
 
+                if(shipFBX){
+                  let destination = new THREE.Vector3(photon.position.x,photon.position.y,photon.position.z);
+                  console.log(destination);
+                  let tween1 = new TWEEN.Tween( shipFBX.position ).to( destination , 10000 );
+                  let tween2 = new TWEEN.Tween( shipFBX.scale ).to( {x:0.1,y:0.1,z:0.1} , 10000 );
+                  shipFBX.lookAt(destination);
+                  tween1.start();
+                  tween2.start();
+                }
+
 
 
             }
+              TWEEN.update(time);
             _renderer.render( _scene, _camera );
         });
     }
@@ -480,7 +482,7 @@ export class Canvas{
     }
 
     shipMaker(active){
-      let shipFBX;
+
         setTimeout(() => {
               shipFBX = ship.draw();
               shipFBX.position.x = 0;
@@ -488,6 +490,9 @@ export class Canvas{
               shipFBX.position.z = 0;
               if(active){
                 _scene.add(shipFBX);
+                console.log(shipFBX.position)
+
+
               }else{
                 _scene.remove(shipFBX);
               }
@@ -534,12 +539,13 @@ export class Canvas{
 
         let x = event.clientX;
         let y = event.clientY;
-        let mouse = {};
+
         mouse.x = (x/window.innerWidth)*2-1;
         mouse.y = -(y/window.innerHeight)*2+1;
         mouse.z = 1;
         //console.log('x'+mouse.x);
         //console.log('y'+mouse.y);
+
         for(let i in _currentGeo){
           _currentGeo[i].position.x = mouse.x*1000;
           _currentGeo[i].position.y = mouse.y*1000;
@@ -550,45 +556,13 @@ export class Canvas{
 
 
         }
-        let rayCast = new THREE.Raycaster();
-        rayCast.setFromCamera(mouse,_camera);
-         let rayo = rayCast.ray;
-         let rango = Math.floor(Math.random() * (1000 - (-500)) + (-500));
-         let valor = rayo.at(rango,new THREE.Vector3( 0, 0, 1 ));
-        console.log(valor);
-        var color = '#'+Math.floor(Math.random()*0xffffff).toString(16).toUpperCase();
-        const light = new THREE.PointLight( color , 10, 5000, 2 );
-        light.power = (100 * (9*3.1416));
-        light.position.set( valor.x,valor.y,valor.z );
-        let ph = new THREE.PointLightHelper( light, 5 );
+        ray = new Raycaster(mouse,_camera);
+        photon = ray.draw();
+        ray.intersectObjects(_scene);
+        ph = new THREE.PointLightHelper( photon, 5 );
         _scene.add(ph);
-        const textureLoader = new THREE.TextureLoader();
-        const textureFlare0 = textureLoader.load( img1 );
-        const textureFlare1 = textureLoader.load( img2 );
-        const textureFlare2 = textureLoader.load( img3 );
+        _scene.add( photon );
 
-        const lensflare = new Lensflare();
-
-        lensflare.addElement( new LensflareElement( textureFlare0, 512, 0 ) );
-        lensflare.addElement( new LensflareElement( textureFlare1, 512, 0 ) );
-        lensflare.addElement( new LensflareElement( textureFlare2, 60, 0.6 ) );
-
-        light.add( lensflare );
-        _scene.add( light );
-        //_scene.add(_light.bulb4[0].position.set(valor));
-        /*let intersectos = rayCast.intersectObjects(_scene.children);
-        console.log(intersectos);
-        intersectos.forEach((item, i) => {
-            item.object.material.opacity = 0.1;
-            item.object.position.z = 3000;
-            item.object.rotation.z = 45;
-          //_scene.remove(item.object);
-        //  item.object.position.x = item.object.position.x + x;
-          console.log(item.object);
-          console.log(i);
-        });*/
-
-        //
     }
 
 
