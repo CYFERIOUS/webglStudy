@@ -15,10 +15,8 @@ import { Modeloader} from './modeloader.js'
 
 import { Raycaster } from './raycaster.js'
 
+import imgb from '../images/cosmic.jpg';
 
-import img1 from '../images/lensflare0.png';
-import img2 from '../images/lensflare2.png';
-import img3 from '../images/lensflare2.png';
 
 
 let _scene;
@@ -54,17 +52,21 @@ let theta = 0;
 let gamma = 0;
 let ball;
 let cameraBall;
-  let mouse = {};
-  let shipFBX;
-  let ray;
-  let photon;
-  let ph;
+let mouse = {};
+let shipFBX;
+let ray;
+let photon;
+let ph;
+
+
 export class Canvas{
 
     constructor(){
 
         _scene = new THREE.Scene();
-        _scene.background = new THREE.Color( 0x909ead );
+        const textureLoader = new THREE.TextureLoader();
+        let planetas = textureLoader.load( imgb );
+        _scene.background = planetas;
         _camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
         _camera.position.z = 5000;
         const cameraHelper = new THREE.CameraHelper( _camera );
@@ -141,7 +143,7 @@ export class Canvas{
                   let destination = new THREE.Vector3(photon.position.x,photon.position.y,photon.position.z);
                   console.log(destination);
                   let tween1 = new TWEEN.Tween( shipFBX.position ).to( destination , 10000 );
-                  let tween2 = new TWEEN.Tween( shipFBX.scale ).to( {x:0.1,y:0.1,z:0.1} , 10000 );
+                  let tween2 = new TWEEN.Tween( shipFBX.scale ).to( {x:shipFBX.scale.x/2,y:shipFBX.scale.y/2,z:shipFBX.scale.z/2} , 10000 );
                   shipFBX.lookAt(destination);
                   tween1.start();
                   tween2.start();
@@ -490,9 +492,7 @@ export class Canvas{
               shipFBX.position.z = 0;
               if(active){
                 _scene.add(shipFBX);
-                console.log(shipFBX.position)
-
-
+                console.log(shipFBX.position);
               }else{
                 _scene.remove(shipFBX);
               }
