@@ -9,10 +9,10 @@ import {Octahedron} from './octahedron.js';
 import {RandomTriangle} from './randomRTriangle.js';
 import {Plane} from './plane.js';
 import {Light} from './lights.js';
+import {LightManager} from './lightManager.js';
 import { VertexNormalsHelper } from '../../node_modules/three/examples/jsm/helpers/VertexNormalsHelper.js';
-import { Lensflare, LensflareElement } from '../../node_modules/three/examples/jsm/objects/Lensflare.js';
-import { Modeloader} from './modeloader.js'
 
+import { Modeloader} from './modeloader.js'
 import { Raycaster } from './raycaster.js'
 
 import imgb from '../images/cosmic.jpg';
@@ -24,7 +24,7 @@ let _camera;
 let _renderer;
 let _axis;
 let _cubo = new Array();
-let _light = {};
+//let _light = {};
 let _rDomELement;
 let _animating = false;
 let _sphere = new Array();
@@ -45,10 +45,8 @@ const octahedron = new Octahedron(100,100,100,100,100);
 const rtrigono = new RandomTriangle(1000,1000,1000);
 const planicie = new Plane(10000,10000,10,10);
 const ship = new Modeloader();
-const lighting = new Light();
-const pointLightHelper = [];
-let dLightHelper1, dLightHelper2,hemiHelper,spotLightHelper,spotLightHelper2,spotLightHelper3,spotLightHelper4;
-let theta = 0;
+let lights;
+
 let gamma = 0;
 let ball;
 let cameraBall;
@@ -74,10 +72,7 @@ export class Canvas{
         _axis = new THREE.AxesHelper( 5000 );
         _axis.position.set( 0, 0, 0 );
         //_scene.add(_axis);
-
         _scene.add(_camera);
-
-
         _cubo = cube.draw();
         _geoRand = randomShape.draw();
         _sphere = sphere.draw();
@@ -85,8 +80,8 @@ export class Canvas{
         _llanura = planicie.draw();
         _octahedron = octahedron.draw();
         _rt = rtrigono.draw();
-        _light = lighting.drawLights();
 
+        lights = new LightManager(_scene);
     }
 
 
@@ -121,25 +116,15 @@ export class Canvas{
                 for (let i in _currentGeo){
                     _currentGeo[i].rotation.x += (ADDX*i);
                     _currentGeo[i].rotation.y += (ADDY*i);
-
                 }
 
-                for (let i in _light.bulb4){
-                  const quaternion = new THREE.Quaternion();
-                  quaternion.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), theta );
-                  _light.bulb4[i].applyQuaternion(quaternion);
-                  _light.bulb4[i].applyQuaternion(quaternion);
-                  _light.bulb4[0].position.x = 3000*Math.sin(theta);
-                  _light.bulb4[0].position.z = 3000*Math.cos(theta);
-                  _light.bulb4[1].position.x = -3000*Math.sin(theta);
-                  _light.bulb4[1].position.z = 3000*Math.cos(theta);
-                  theta += ADDX;
-                }
+                lights.animatePointLights();
+
                 for (let i in normals){
                     normals[i].update();
                 }
 
-                if(shipFBX){
+                if(shipFBX && photon){
                   let destination = new THREE.Vector3(photon.position.x,photon.position.y,photon.position.z);
                   console.log(destination);
                   let tween1 = new TWEEN.Tween( shipFBX.position ).to( destination , 10000 );
@@ -307,19 +292,19 @@ export class Canvas{
      document.addEventListener("keydown", event => {
          switch(event.key){
            case 'a':
-               this.ambient_Lights();
+               lights.ambient_Lights(_scene);
            break;
            case 'b':
-               this.hemisphere_Lights();
+               lights.hemisphere_Lights(_scene);
            break;
            case 'c':
-             this.directional_Lights();
+             lights.directional_Lights(_scene);
            break;
            case 'd':
-               this.point_Lights();
+               lights.point_Lights(_scene);
            break;
            case 'e':
-                 this.spot_Lights();
+                 lights.spot_Lights(_scene);
            break;
          }
      });
@@ -334,129 +319,7 @@ export class Canvas{
       });
     }
 
-    ambient_Lights(){
-        _scene.add( _light.bulb1 );
 
-        _scene.remove(_light.bulb2);
-        this.removeLights(_light.bulb3);
-        this.removeLights(_light.bulb3);
-        this.removeLights(_light.bulb4);
-        this.removeLights(_light.bulb5);
-
-        this.removeHelper(hemiHelper);
-        this.removeHelper(dLightHelper1);
-        this.removeHelper(dLightHelper2);
-        this.removeHelper(pointLightHelper[0]);
-        this.removeHelper(pointLightHelper[1]);
-        this.removeHelper(spotLightHelper);
-        this.removeHelper(spotLightHelper2);
-        this.removeHelper(spotLightHelper3);
-        this.removeHelper(spotLightHelper4);
-
-
-    }
-    hemisphere_Lights(){
-          _scene.add( _light.bulb2 );
-          hemiHelper = new THREE.HemisphereLightHelper( _light.bulb2, 300 );
-          _scene.add( hemiHelper );
-
-          _scene.remove(_light.bulb1);
-          this.removeLights(_light.bulb3);
-          this.removeLights(_light.bulb4);
-          this.removeLights(_light.bulb5);
-
-          this.removeHelper(dLightHelper1);
-          this.removeHelper(dLightHelper2);
-          this.removeHelper(pointLightHelper[0]);
-          this.removeHelper(pointLightHelper[1]);
-          this.removeHelper(spotLightHelper);
-          this.removeHelper(spotLightHelper2);
-          this.removeHelper(spotLightHelper3);
-          this.removeHelper(spotLightHelper4);
-
-
-    }
-    directional_Lights(){
-        _scene.add( _light.bulb3[0] );
-        _scene.add( _light.bulb3[1] );
-         dLightHelper1 = new THREE.DirectionalLightHelper( _light.bulb3[0], 800, 0x000000 );
-        _scene.add( dLightHelper1 );
-         dLightHelper2 = new THREE.DirectionalLightHelper( _light.bulb3[1], 800, 0x000000 );
-         _scene.add( dLightHelper2 );
-
-         _scene.remove(_light.bulb1);
-         _scene.remove(_light.bulb2);
-         this.removeLights(_light.bulb4);
-         this.removeLights(_light.bulb5);
-
-         this.removeHelper(hemiHelper);
-         this.removeHelper(pointLightHelper[0]);
-         this.removeHelper(pointLightHelper[1]);
-         this.removeHelper(spotLightHelper);
-         this.removeHelper(spotLightHelper2);
-         this.removeHelper(spotLightHelper3);
-         this.removeHelper(spotLightHelper4);
-
-    }
-    point_Lights(){
-      _scene.add( _light.bulb4[0] );
-      _scene.add( _light.bulb4[1] );
-     pointLightHelper[0] = new THREE.PointLightHelper( _light.bulb4[0], 300 );
-     pointLightHelper[1] = new THREE.PointLightHelper( _light.bulb4[1], 300 );
-      _scene.add( pointLightHelper[0] );
-      _scene.add( pointLightHelper[1] );
-
-      _scene.remove(_light.bulb1);
-      _scene.remove(_light.bulb2);
-      this.removeLights(_light.bulb3);
-      this.removeLights(_light.bulb5);
-
-      this.removeHelper(hemiHelper);
-      this.removeHelper(dLightHelper1);
-      this.removeHelper(dLightHelper2);
-      this.removeHelper(spotLightHelper);
-      this.removeHelper(spotLightHelper2);
-      this.removeHelper(spotLightHelper3);
-      this.removeHelper(spotLightHelper4);
-
-    }
-    spot_Lights(){
-      _scene.add( _light.bulb5[0] );
-      _scene.add( _light.bulb5[1] );
-      _scene.add( _light.bulb5[2] );
-      _scene.add( _light.bulb5[3] );
-
-      spotLightHelper = new THREE.SpotLightHelper( _light.bulb5[0] );
-      _scene.add( spotLightHelper );
-      spotLightHelper2 = new THREE.SpotLightHelper( _light.bulb5[1] );
-      _scene.add( spotLightHelper2 );
-      spotLightHelper3 = new THREE.SpotLightHelper( _light.bulb5[2] );
-      _scene.add( spotLightHelper3 );
-      spotLightHelper4 = new THREE.SpotLightHelper( _light.bulb5[3] );
-      _scene.add( spotLightHelper4 );
-
-      _scene.remove(_light.bulb1);
-      _scene.remove(_light.bulb2);
-      this.removeLights(_light.bulb3);
-      this.removeLights(_light.bulb4);
-
-      this.removeHelper(hemiHelper);
-      this.removeHelper(dLightHelper1);
-      this.removeHelper(dLightHelper2);
-      this.removeHelper(pointLightHelper[0]);
-      this.removeHelper(pointLightHelper[1]);
-
-
-
-    }
-    removeHelper(helper){
-      _scene.remove(helper);
-    }
-    removeLights(focus){
-      for(let i in focus){
-        _scene.remove(focus[i]);
-      }
-    }
 
     primitiveAdder(active,primitive){
         if(active){
