@@ -8,6 +8,7 @@ import {RandomGeo} from './randomGeo.js';
 import {Octahedron} from './octahedron.js';
 import {RandomTriangle} from './randomRTriangle.js';
 import {Plane} from './plane.js';
+import {Startrek} from './startrek.js';
 import {Light} from './lights.js';
 import {LightManager} from './lightManager.js';
 import { VertexNormalsHelper } from '../../node_modules/three/examples/jsm/helpers/VertexNormalsHelper.js';
@@ -16,8 +17,6 @@ import { Modeloader} from './modeloader.js'
 import { Raycaster } from './raycaster.js'
 
 import imgb from '../images/cosmic.jpg';
-
-
 
 let _scene;
 let _camera;
@@ -31,11 +30,13 @@ let _sphere = new Array();
 let _torus = new Array();
 let _geoRand = new Array();
 let _octahedron = new Array(1000,1000,1000,1000,500);
+
 let _llanura = new Array();
 let _rt = new Array();
 let activeNormals = true;
 let normals = new Array();
 let _currentGeo = new Array();
+let _starShape = new Array();
 
 const cube = new Cube(100,100,100);
 const sphere = new Sphere(500,30,30);
@@ -45,6 +46,8 @@ const octahedron = new Octahedron(100,100,100,100,100);
 const rtrigono = new RandomTriangle(1000,1000,1000);
 const planicie = new Plane(10000,10000,10,10);
 const ship = new Modeloader();
+const startoko = new Startrek(100,100,100);
+
 let lights;
 
 let gamma = 0;
@@ -55,6 +58,7 @@ let shipFBX;
 let ray;
 let photon;
 let ph;
+
 
 
 export class Canvas{
@@ -80,7 +84,8 @@ export class Canvas{
         _llanura = planicie.draw();
         _octahedron = octahedron.draw();
         _rt = rtrigono.draw();
-
+        _starShape = startoko.draw();
+        
         lights = new LightManager(_scene);
     }
 
@@ -117,7 +122,7 @@ export class Canvas{
                     _currentGeo[i].rotation.x += (ADDX*i);
                     _currentGeo[i].rotation.y += (ADDY*i);
                 }
-
+                startoko.animation();
                 lights.animatePointLights();
 
                 for (let i in normals){
@@ -284,6 +289,18 @@ export class Canvas{
              this.shipMaker(true);
              activeNormals = !activeNormals;
              break;
+             case '8':
+             this.primitiveAdder(false,_cubo);
+             this.primitiveAdder(false,_sphere);
+             this.primitiveAdder(false,_torus);
+             this.primitiveAdder(false,_geoRand);
+             this.primitiveAdder(false,_octahedron);
+             this.primitiveAdder(false,_rt);
+             this.shipMaker(false);
+             _scene.add(_starShape);
+             activeNormals = !activeNormals;
+             break;
+
 
            }
      });
@@ -364,7 +381,7 @@ export class Canvas{
 
     draw() {
         //_scene.add(_axis)
-
+          
           this.cameraSwitcher();
           this.geometrySwitcher();
           this.lightSwitcher();
