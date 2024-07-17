@@ -74,12 +74,21 @@ export class Startrek {
        }
     }
 
-    animation(){
+    animation(x,y){
 
-      for (let i in _pile){
-        group.rotation.x += (1*i);
-        group.rotation.y += (1*i);
-      }
+      /*for (let i in _pile){
+        group.rotation.x = (x*i);
+        group.rotation.y = (y*i);
+      }*/
+      group.traverse((child)=>{
+          if(child.isObject3D){
+            for (let i in _pile){
+              child.rotation.x =  (x*i);
+              child.rotation.y =  (y*i);
+            }
+          }
+            
+      })
     }
 
     draw(){

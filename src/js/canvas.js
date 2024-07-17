@@ -47,6 +47,8 @@ const rtrigono = new RandomTriangle(1000,1000,1000);
 const planicie = new Plane(10000,10000,10,10);
 const ship = new Modeloader();
 const startoko = new Startrek(100,100,100);
+const clock = new THREE.Clock(); 
+
 
 let lights;
 
@@ -63,6 +65,18 @@ let ph;
 
 export class Canvas{
 
+
+    geometries(){
+      _cubo = cube.draw();
+      _geoRand = randomShape.draw();
+      _sphere = sphere.draw();
+      _torus = torus.draw();
+      _llanura = planicie.draw();
+      _octahedron = octahedron.draw();
+      _rt = rtrigono.draw();
+      _starShape = startoko.draw();
+    }
+
     constructor(){
 
         _scene = new THREE.Scene();
@@ -77,14 +91,7 @@ export class Canvas{
         _axis.position.set( 0, 0, 0 );
         //_scene.add(_axis);
         _scene.add(_camera);
-        _cubo = cube.draw();
-        _geoRand = randomShape.draw();
-        _sphere = sphere.draw();
-        _torus = torus.draw();
-        _llanura = planicie.draw();
-        _octahedron = octahedron.draw();
-        _rt = rtrigono.draw();
-        _starShape = startoko.draw();
+        this.geometries();
         
         lights = new LightManager(_scene);
     }
@@ -110,19 +117,25 @@ export class Canvas{
           }
       });
 
-
+      const elapsedTime = clock.getElapsedTime();
         requestAnimationFrame(() =>{
+         
             this.animate();
+            
+            //angularVelocity
+            let ADDX = 0.05;
+            let ADDY = 0.02;
 
-            let ADDX = 0.005;
-            let ADDY = 0.002;
+            let angularDeplacementX = elapsedTime*ADDX;
+            let angularDeplacementY = elapsedTime*ADDY;
 
             if(_animating){
+              //i is the differential index 
                 for (let i in _currentGeo){
-                    _currentGeo[i].rotation.x += (ADDX*i);
-                    _currentGeo[i].rotation.y += (ADDY*i);
+                    _currentGeo[i].rotation.x = (angularDeplacementX*i);
+                    _currentGeo[i].rotation.y = (angularDeplacementY*i);
                 }
-                startoko.animation();
+                startoko.animation(angularDeplacementX,angularDeplacementY);
                 lights.animatePointLights();
 
                 for (let i in normals){
@@ -379,7 +392,7 @@ export class Canvas{
         }, 2000);
     }
 
-    draw() {
+    draw(renderWidth, renderHeight) {
         //_scene.add(_axis)
           
           this.cameraSwitcher();
@@ -387,8 +400,12 @@ export class Canvas{
           this.lightSwitcher();
           this.animationSwitcher();
 
+          _camera.aspect = renderWidth/renderHeight;
+          _camera.updateProjectionMatrix();
+
         _renderer = new THREE.WebGLRenderer();
-        _renderer.setSize( window.innerWidth, window.innerHeight );
+        _renderer.setSize( renderWidth, renderHeight );
+        _renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
         _rDomELement = _renderer.domElement;
         document.body.appendChild( _rDomELement );
     }
