@@ -34,6 +34,5 @@ export class Sphere{
       draw() {
         this.createMatrix();
         return _pile;
-        //return _geoball;
       }
 }

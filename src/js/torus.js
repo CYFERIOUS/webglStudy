@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import {Materials} from './materials.js';
-
 let _geoTorus;
 let _donut;
 let _size = new Array(200,400,600,800,1000,1200,1400,1600,1800);

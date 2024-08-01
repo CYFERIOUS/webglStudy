@@ -23,12 +23,12 @@ let _camera;
 let _renderer;
 let _axis;
 let _cubo = new Array();
-//let _light = {};
 let _rDomELement;
 let _animating = false;
 let _sphere = new Array();
 let _torus = new Array();
 let _geoRand = new Array();
+let _currentCopy = new Array();
 let _octahedron = new Array(1000,1000,1000,1000,500);
 
 let _llanura = new Array();
@@ -62,6 +62,9 @@ let photon;
 let ph;
 
 
+    const intersectionPoint = new THREE.Vector3();
+    const planeNormal = new THREE.Vector3();
+    const plane = new THREE.Plane();
 
 export class Canvas{
 
@@ -124,18 +127,20 @@ export class Canvas{
             
             //angularVelocity
             let ADDX = 0.05;
-            let ADDY = 0.02;
+            let ADDY = 0.03;
+            let ADDZ = 0.01;
 
             let angularDeplacementX = elapsedTime*ADDX;
             let angularDeplacementY = elapsedTime*ADDY;
+            let angularDeplacementZ = elapsedTime*ADDZ;
 
             if(_animating){
               //i is the differential index 
                 for (let i in _currentGeo){
-                    _currentGeo[i].rotation.x = (angularDeplacementX*i);
-                    _currentGeo[i].rotation.y = (angularDeplacementY*i);
+                    _currentGeo[i].applyMatrix( new THREE.Matrix4().makeRotationX(angularDeplacementX*i) );
+                    _currentGeo[i].applyMatrix( new THREE.Matrix4().makeRotationY(angularDeplacementY*i) );
+                    _currentGeo[i].applyMatrix( new THREE.Matrix4().makeRotationZ(angularDeplacementY*i) );
                 }
-                startoko.animation(angularDeplacementX,angularDeplacementY);
                 lights.animatePointLights();
 
                 for (let i in normals){
@@ -212,87 +217,91 @@ export class Canvas{
    geometrySwitcher(){
      this.primitiveAdder(true,_cubo);
      _currentGeo = _cubo;
-     document.addEventListener("keydown", event => {
-         switch(event.key){
+     document.addEventListener("keydown", (e) => {
+      
+  
+     
+         switch(e.key){
+          
              case '1':
                  this.normalsAdder(false,_currentGeo);
                  _currentGeo = _cubo;
                  this.shipMaker(false);
-                 this.primitiveAdder(true,_cubo);
+                 this.primitiveAdder(true,_currentGeo);
                  this.primitiveAdder(false,_sphere);
                  this.primitiveAdder(false,_torus);
                  this.primitiveAdder(false,_octahedron);
                  this.primitiveAdder(false,_geoRand);
-                 this.primitiveAdder(false,_rt);
+                 this.primitiveAdder(false,_rt); 
                  this.normalsAdder(activeNormals,_currentGeo);
                  activeNormals = !activeNormals;
              break;
              case '2':
                  this.normalsAdder(false,_currentGeo);
                  _currentGeo = _sphere;
-                 this.primitiveAdder(false,_cubo);
                  this.shipMaker(false);
+                 this.primitiveAdder(false,_cubo);
                  this.primitiveAdder(true,_sphere);
                  this.primitiveAdder(false,_torus);
                  this.primitiveAdder(false,_octahedron);
                  this.primitiveAdder(false,_geoRand);
                  this.primitiveAdder(false,_rt);
                  this.normalsAdder(activeNormals,_currentGeo);
-                 activeNormals = !activeNormals;
+                 activeNormals = !activeNormals; 
              break;
              case '3':
+            
                  this.normalsAdder(false,_currentGeo);
                  _currentGeo = _torus;
-                 this.primitiveAdder(false,_cubo);
-                 this.primitiveAdder(false,_sphere);
                  this.shipMaker(false);
+                  this.primitiveAdder(false,_cubo);
+                 this.primitiveAdder(false,_sphere);
                  this.primitiveAdder(true,_torus);
                  this.primitiveAdder(false,_octahedron);
                  this.primitiveAdder(false,_rt);
                  this.primitiveAdder(false,_geoRand);
                  this.normalsAdder(activeNormals,_currentGeo);
-                 activeNormals = !activeNormals;
+                 activeNormals = !activeNormals; 
              break;
              case '4':
                  this.normalsAdder(false,_currentGeo);
                  _currentGeo = _geoRand;
+                 this.shipMaker(false);
                  this.primitiveAdder(false,_cubo);
                  this.primitiveAdder(false,_sphere);
                  this.primitiveAdder(false,_torus);
                  this.primitiveAdder(false,_octahedron);
                  this.primitiveAdder(false,_rt);
-                 this.shipMaker(false);
                  this.primitiveAdder(true,_geoRand);
                  this.normalsAdder(activeNormals,_currentGeo);
-                 activeNormals = !activeNormals;
+                 activeNormals = !activeNormals; 
              break;
              case '5':
                  this.normalsAdder(false,_currentGeo);
                  _currentGeo = _octahedron;
+                 this.shipMaker(false);
                  this.primitiveAdder(false,_cubo);
                  this.primitiveAdder(false,_sphere);
                  this.primitiveAdder(false,_torus);
                  this.primitiveAdder(false,_geoRand);
                  this.primitiveAdder(false,_rt);
-                 this.shipMaker(false);
                  this.primitiveAdder(true,_currentGeo);
                  this.normalsAdder(activeNormals,_currentGeo);
-                 activeNormals = !activeNormals;
+                 activeNormals = !activeNormals; 
              break;
              case '6':
                  this.normalsAdder(false,_currentGeo);
                  _currentGeo = _rt;
-                 this.primitiveAdder(false,_cubo);
+                 this.shipMaker(false);
+                  this.primitiveAdder(false,_cubo);
                  this.primitiveAdder(false,_sphere);
                  this.primitiveAdder(false,_torus);
                  this.primitiveAdder(false,_geoRand);
                  this.primitiveAdder(false,_octahedron);
-                 this.shipMaker(false);
                  this.primitiveAdder(true,_currentGeo);
                  activeNormals = !activeNormals;
              break;
              case '7':
-
              this.primitiveAdder(false,_cubo);
              this.primitiveAdder(false,_sphere);
              this.primitiveAdder(false,_torus);
@@ -302,7 +311,9 @@ export class Canvas{
              this.shipMaker(true);
              activeNormals = !activeNormals;
              break;
-             case '8':
+             case '8':  
+             _currentGeo = _starShape;
+             this.primitiveAdder(true,_currentGeo);
              this.primitiveAdder(false,_cubo);
              this.primitiveAdder(false,_sphere);
              this.primitiveAdder(false,_torus);
@@ -310,12 +321,13 @@ export class Canvas{
              this.primitiveAdder(false,_octahedron);
              this.primitiveAdder(false,_rt);
              this.shipMaker(false);
-             _scene.add(_starShape);
+             _scene.add(_currentGeo);
              activeNormals = !activeNormals;
              break;
 
 
            }
+           
      });
    }
    lightSwitcher(){
@@ -409,29 +421,22 @@ export class Canvas{
         _rDomELement = _renderer.domElement;
         document.body.appendChild( _rDomELement );
     }
-
     addMouseHandler(){
         _rDomELement.addEventListener('mousedown',this.onMouseDown,false);
         _rDomELement.addEventListener('mousemove',this.onMouseMove,false);
         _rDomELement.addEventListener('mouseup',this.onMouseUp,false);
     }
-    onMouseMove(){
+    onMouseMove(event){
+       
 
     }
     onMouseUp(){
-      for(let i in _currentGeo){
-        _currentGeo[i].position.x = 0;
-        _currentGeo[i].position.y = 0;
-        _currentGeo[i].position.z = 0;
-        _currentGeo[i].scale.x = 1;
-        _currentGeo[i].scale.y = 1;
-        _currentGeo[i].scale.z = 1;
-        _currentGeo[i].rotation.z = 0;
-      }
+      
     }
 
 
     onMouseDown(event){
+      
         event.preventDefault();
 
         let x = event.clientX;
@@ -443,25 +448,22 @@ export class Canvas{
         //console.log('x'+mouse.x);
         //console.log('y'+mouse.y);
 
-        for(let i in _currentGeo){
-          _currentGeo[i].position.x = mouse.x*1000;
-          _currentGeo[i].position.y = mouse.y*1000;
-          _currentGeo[i].position.z = mouse.z*1000;
-          _currentGeo[i].scale.x = 1.3;
-          _currentGeo[i].scale.y = 1.3;
-          _currentGeo[i].scale.z = 1.3;
-
-
-        }
         ray = new Raycaster(mouse,_camera);
         photon = ray.draw();
         ray.intersectObjects(_scene);
         ph = new THREE.PointLightHelper( photon, 5 );
+      
         _scene.add(ph);
         _scene.add( photon );
-
+        
+        for(let i in _currentGeo){
+    
+          _currentGeo[i].applyMatrix4( new THREE.Matrix4().clone().setPosition(photon.position.x,photon.position.y,photon.position.z) );
+          //_currentGeo[i].applyMatrix( new THREE.Matrix4().makeScale(0.3,0.3,0.3));
+        }
     }
-
-
+    
 
 }
+
+
