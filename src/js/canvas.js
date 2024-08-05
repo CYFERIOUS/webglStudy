@@ -133,12 +133,6 @@ export class Canvas{
             let angularDeplacementZ = elapsedTime*ADDZ;
 
             if(_animating){
-              //i is the differential index 
-                /*for (let i in _currentGeo){
-                    _currentGeo[i].applyMatrix( new THREE.Matrix4().makeRotationX(angularDeplacementX*i) );
-                    _currentGeo[i].applyMatrix( new THREE.Matrix4().makeRotationY(angularDeplacementY*i) );
-                    _currentGeo[i].applyMatrix( new THREE.Matrix4().makeRotationZ(angularDeplacementY*i) );
-                }*/
                 _scene.traverse((child)=>{
                   if(child.isObject3D){
                     for(let i in  _sceneObjectsPile){
