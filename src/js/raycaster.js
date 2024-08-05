@@ -13,7 +13,7 @@ export class Raycaster{
       rayCast = new THREE.Raycaster();
       rayCast.setFromCamera(mouse,_camera);
       rayo = rayCast.ray;
-      rango = Math.floor(Math.random() * (4000 - (-0)) + (-0));
+      rango = Math.floor(Math.random() * (4000 - (-1000)) + (-1000));
       valor = rayo.at(rango,new THREE.Vector3( 0, 0, 1 ));
 
         var color = this.randomColor();

@@ -37,6 +37,7 @@ let activeNormals = true;
 let normals = new Array();
 let _currentGeo = new Array();
 let _starShape = new Array();
+let _sceneObjectsPile = new Array();
 
 const cube = new Cube(100,100,100);
 const sphere = new Sphere(500,30,30);
@@ -61,10 +62,7 @@ let ray;
 let photon;
 let ph;
 
-
-    const intersectionPoint = new THREE.Vector3();
-    const planeNormal = new THREE.Vector3();
-    const plane = new THREE.Plane();
+    
 
 export class Canvas{
 
@@ -136,11 +134,21 @@ export class Canvas{
 
             if(_animating){
               //i is the differential index 
-                for (let i in _currentGeo){
+                /*for (let i in _currentGeo){
                     _currentGeo[i].applyMatrix( new THREE.Matrix4().makeRotationX(angularDeplacementX*i) );
                     _currentGeo[i].applyMatrix( new THREE.Matrix4().makeRotationY(angularDeplacementY*i) );
                     _currentGeo[i].applyMatrix( new THREE.Matrix4().makeRotationZ(angularDeplacementY*i) );
-                }
+                }*/
+                _scene.traverse((child)=>{
+                  if(child.isObject3D){
+                    for(let i in  _sceneObjectsPile){
+                      _sceneObjectsPile[i].rotation.x =  (angularDeplacementX*i);
+                      _sceneObjectsPile[i].rotation.y =  (angularDeplacementY*i);
+                      _sceneObjectsPile[i].rotation.z =  (angularDeplacementZ*i);
+                    }
+                  }
+              });
+              
                 lights.animatePointLights();
 
                 for (let i in normals){
@@ -455,11 +463,20 @@ export class Canvas{
       
         _scene.add(ph);
         _scene.add( photon );
-        
+     
         for(let i in _currentGeo){
-    
-          _currentGeo[i].applyMatrix4( new THREE.Matrix4().clone().setPosition(photon.position.x,photon.position.y,photon.position.z) );
-          //_currentGeo[i].applyMatrix( new THREE.Matrix4().makeScale(0.3,0.3,0.3));
+       
+          const  OBJ = _currentGeo[i].clone();
+          OBJ.position.x = photon.position.x;
+          OBJ.position.y = photon.position.y;
+          OBJ.position.z = photon.position.z;
+          OBJ.scale.x = 0.3;
+          OBJ.scale.y = 0.3;
+          OBJ.scale.z = 0.3;
+          _sceneObjectsPile.push(OBJ);
+          _scene.add(OBJ);
+         
+          
         }
     }
     
