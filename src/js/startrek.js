@@ -20,7 +20,7 @@ let _pile = new Array();
 export class Startrek {
 
     constructor(sizeX, sizeY, sizeZ ) {
-        _geometry = new THREE.BoxGeometry(sizeX, sizeY, sizeZ );
+        _geometry = new THREE.BoxGeometry(sizeX,sizeY,sizeZ);
         _material = new THREE.MeshBasicMaterial({
             transparent: true
         });

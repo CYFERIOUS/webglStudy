@@ -26,7 +26,7 @@ export class Particles {
         // Create a dummy Vector to store the sampled coordinates
         const tempPosition = new THREE.Vector3();
         // Loop to sample a coordinate for each points
-        for (let i = 0; i < 150000; i ++) {
+        for (let i = 0; i < 1000; i ++) {
           // Sample a random position in the torus
           _sampler.sample(tempPosition);
           // Push the coordinates of the sampled coordinates into the array

@@ -24,7 +24,7 @@ let _renderer;
 let _axis;
 let _cubo = new Array();
 let _rDomELement;
-let _animating = false;
+let _animating = true;
 let _sphere = new Array();
 let _torus = new Array();
 let _geoRand = new Array();
@@ -131,23 +131,29 @@ export class Canvas{
             let angularDeplacementX = elapsedTime*ADDX;
             let angularDeplacementY = elapsedTime*ADDY;
             let angularDeplacementZ = elapsedTime*ADDZ;
-
-            if(_animating){
-                _scene.traverse((child)=>{
-                  if(child.isObject3D){
-                    for(let i in  _sceneObjectsPile){
-                      _sceneObjectsPile[i].rotation.x =  (angularDeplacementX*i);
-                      _sceneObjectsPile[i].rotation.y =  (angularDeplacementY*i);
-                      _sceneObjectsPile[i].rotation.z =  (angularDeplacementZ*i);
-                    }
-                  }
-              });
-              
-                lights.animatePointLights();
-
-                for (let i in normals){
-                    normals[i].update();
+            for (let i in _currentGeo){
+              _currentGeo[i].rotation.x =  (angularDeplacementX*i);
+              _currentGeo[i].rotation.y =  (angularDeplacementY*i);
+              _currentGeo[i].rotation.z =  (angularDeplacementZ*i);
+            }
+            _scene.traverse((child)=>{
+              if(child.isObject3D){
+                for(let i in  _sceneObjectsPile){
+                  _sceneObjectsPile[i].rotation.x =  (angularDeplacementX*i);
+                  _sceneObjectsPile[i].rotation.y =  (angularDeplacementY*i);
+                  _sceneObjectsPile[i].rotation.z =  (angularDeplacementZ*i);
                 }
+              }
+          });
+          
+            lights.animatePointLights();
+
+            for (let i in normals){
+                normals[i].update();
+            }
+            
+            if(_animating){
+               
 
                 if(shipFBX && photon){
                   let destination = new THREE.Vector3(photon.position.x,photon.position.y,photon.position.z);
@@ -217,85 +223,85 @@ export class Canvas{
    }
 
    geometrySwitcher(){
-     this.primitiveAdder(true,_cubo);
-     _currentGeo = _cubo;
-     document.addEventListener("keydown", (e) => {
-      
-  
+     //this.primitiveAdder(true,_cubo);
+    // _currentGeo = _cubo;
      
+     document.addEventListener("keydown", (e) => {
          switch(e.key){
-          
              case '1':
-                 this.normalsAdder(false,_currentGeo);
-                 _currentGeo = _cubo;
-                 this.shipMaker(false);
-                 this.primitiveAdder(true,_currentGeo);
-                 this.primitiveAdder(false,_sphere);
-                 this.primitiveAdder(false,_torus);
-                 this.primitiveAdder(false,_octahedron);
-                 this.primitiveAdder(false,_geoRand);
-                 this.primitiveAdder(false,_rt); 
-                 this.normalsAdder(activeNormals,_currentGeo);
-                 activeNormals = !activeNormals;
+              this.primitiveAdder(false,_cubo);
+              this.primitiveAdder(false,_sphere);
+              this.primitiveAdder(false,_torus);
+              this.primitiveAdder(false,_geoRand);
+              this.primitiveAdder(false,_octahedron);
+              this.primitiveAdder(false,_rt);
+              this.shipMaker(true);
+              activeNormals = !activeNormals;
              break;
              case '2':
-                 this.normalsAdder(false,_currentGeo);
-                 _currentGeo = _sphere;
-                 this.shipMaker(false);
-                 this.primitiveAdder(false,_cubo);
-                 this.primitiveAdder(true,_sphere);
-                 this.primitiveAdder(false,_torus);
-                 this.primitiveAdder(false,_octahedron);
-                 this.primitiveAdder(false,_geoRand);
-                 this.primitiveAdder(false,_rt);
-                 this.normalsAdder(activeNormals,_currentGeo);
-                 activeNormals = !activeNormals; 
+              this.normalsAdder(false,_currentGeo);
+              _currentGeo = _cubo;
+              this.primitiveAdder(true,_currentGeo);
+              this.primitiveAdder(false,_sphere);
+              this.primitiveAdder(false,_torus);
+              this.primitiveAdder(false,_octahedron);
+              this.primitiveAdder(false,_geoRand);
+              this.primitiveAdder(false,_rt); 
+              this.normalsAdder(activeNormals,_currentGeo);
+              activeNormals = !activeNormals;
              break;
              case '3':
-            
-                 this.normalsAdder(false,_currentGeo);
-                 _currentGeo = _torus;
-                 this.shipMaker(false);
-                  this.primitiveAdder(false,_cubo);
-                 this.primitiveAdder(false,_sphere);
-                 this.primitiveAdder(true,_torus);
-                 this.primitiveAdder(false,_octahedron);
-                 this.primitiveAdder(false,_rt);
-                 this.primitiveAdder(false,_geoRand);
-                 this.normalsAdder(activeNormals,_currentGeo);
-                 activeNormals = !activeNormals; 
+              this.normalsAdder(false,_currentGeo);
+              _currentGeo = _sphere;
+              this.primitiveAdder(false,_cubo);
+              this.primitiveAdder(true,_sphere);
+              this.primitiveAdder(false,_torus);
+              this.primitiveAdder(false,_octahedron);
+              this.primitiveAdder(false,_geoRand);
+              this.primitiveAdder(false,_rt);
+              this.normalsAdder(activeNormals,_currentGeo);
+              activeNormals = !activeNormals;  
              break;
              case '4':
-                 this.normalsAdder(false,_currentGeo);
-                 _currentGeo = _geoRand;
-                 this.shipMaker(false);
-                 this.primitiveAdder(false,_cubo);
-                 this.primitiveAdder(false,_sphere);
-                 this.primitiveAdder(false,_torus);
-                 this.primitiveAdder(false,_octahedron);
-                 this.primitiveAdder(false,_rt);
-                 this.primitiveAdder(true,_geoRand);
-                 this.normalsAdder(activeNormals,_currentGeo);
-                 activeNormals = !activeNormals; 
+              this.normalsAdder(false,_currentGeo);
+              _currentGeo = _torus;
+              this.primitiveAdder(false,_cubo);
+              this.primitiveAdder(false,_sphere);
+              this.primitiveAdder(true,_torus);
+              this.primitiveAdder(false,_octahedron);
+              this.primitiveAdder(false,_rt);
+              this.primitiveAdder(false,_geoRand);
+              this.normalsAdder(activeNormals,_currentGeo);
+              activeNormals = !activeNormals; 
              break;
              case '5':
-                 this.normalsAdder(false,_currentGeo);
-                 _currentGeo = _octahedron;
-                 this.shipMaker(false);
-                 this.primitiveAdder(false,_cubo);
-                 this.primitiveAdder(false,_sphere);
-                 this.primitiveAdder(false,_torus);
-                 this.primitiveAdder(false,_geoRand);
-                 this.primitiveAdder(false,_rt);
-                 this.primitiveAdder(true,_currentGeo);
-                 this.normalsAdder(activeNormals,_currentGeo);
-                 activeNormals = !activeNormals; 
+                this.normalsAdder(false,_currentGeo);
+                _currentGeo = _geoRand;
+                this.primitiveAdder(false,_cubo);
+                this.primitiveAdder(false,_sphere);
+                this.primitiveAdder(false,_torus);
+                this.primitiveAdder(false,_octahedron);
+                this.primitiveAdder(false,_rt);
+                this.primitiveAdder(true,_geoRand);
+                this.normalsAdder(activeNormals,_currentGeo);
+                activeNormals = !activeNormals; 
              break;
              case '6':
-                 this.normalsAdder(false,_currentGeo);
+                this.normalsAdder(false,_currentGeo);
+                _currentGeo = _octahedron;
+                this.primitiveAdder(false,_cubo);
+                this.primitiveAdder(false,_sphere);
+                this.primitiveAdder(false,_torus);
+                this.primitiveAdder(false,_geoRand);
+                this.primitiveAdder(false,_rt);
+                this.primitiveAdder(true,_currentGeo);
+                this.normalsAdder(activeNormals,_currentGeo);
+                activeNormals = !activeNormals;
+             break;
+             case '7':
+              this.normalsAdder(false,_currentGeo);
                  _currentGeo = _rt;
-                 this.shipMaker(false);
-                  this.primitiveAdder(false,_cubo);
+                 this.primitiveAdder(false,_cubo);
                  this.primitiveAdder(false,_sphere);
                  this.primitiveAdder(false,_torus);
                  this.primitiveAdder(false,_geoRand);
@@ -303,30 +309,18 @@ export class Canvas{
                  this.primitiveAdder(true,_currentGeo);
                  activeNormals = !activeNormals;
              break;
-             case '7':
-             this.primitiveAdder(false,_cubo);
-             this.primitiveAdder(false,_sphere);
-             this.primitiveAdder(false,_torus);
-             this.primitiveAdder(false,_geoRand);
-             this.primitiveAdder(false,_octahedron);
-             this.primitiveAdder(false,_rt);
-             this.shipMaker(true);
-             activeNormals = !activeNormals;
-             break;
              case '8':  
-             _currentGeo = _starShape;
-             this.primitiveAdder(true,_currentGeo);
-             this.primitiveAdder(false,_cubo);
-             this.primitiveAdder(false,_sphere);
-             this.primitiveAdder(false,_torus);
-             this.primitiveAdder(false,_geoRand);
-             this.primitiveAdder(false,_octahedron);
-             this.primitiveAdder(false,_rt);
-             this.shipMaker(false);
-             _scene.add(_currentGeo);
-             activeNormals = !activeNormals;
+                  _currentGeo = _starShape;
+                  this.primitiveAdder(true,_currentGeo);
+                  this.primitiveAdder(false,_cubo);
+                  this.primitiveAdder(false,_sphere);
+                  this.primitiveAdder(false,_torus);
+                  this.primitiveAdder(false,_geoRand);
+                  this.primitiveAdder(false,_octahedron);
+                  this.primitiveAdder(false,_rt);
+                  _scene.add(_currentGeo);
+                  activeNormals = !activeNormals;
              break;
-
 
            }
            
