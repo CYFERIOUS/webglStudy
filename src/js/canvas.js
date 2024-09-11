@@ -12,11 +12,11 @@ import {Startrek} from './startrek.js';
 import {Light} from './lights.js';
 import {LightManager} from './lightManager.js';
 import { VertexNormalsHelper } from '../../node_modules/three/examples/jsm/helpers/VertexNormalsHelper.js';
-
+import {OrbitControls} from '../../node_modules/three/examples/jsm/controls/OrbitControls.js';
 import { Modeloader} from './modeloader.js'
 import { Raycaster } from './raycaster.js'
+import { Texture } from './texture.js'
 
-import imgb from '../images/cosmic.jpg';
 
 let _scene;
 let _camera;
@@ -49,6 +49,7 @@ const planicie = new Plane(10000,10000,10,10);
 const ship = new Modeloader();
 const startoko = new Startrek(100,100,100);
 const clock = new THREE.Clock(); 
+const texture = new Texture();
 
 
 let lights;
@@ -81,11 +82,9 @@ export class Canvas{
     constructor(){
 
         _scene = new THREE.Scene();
-        const textureLoader = new THREE.TextureLoader();
-        let planetas = textureLoader.load( imgb );
-        _scene.background = planetas;
+        _scene.background = texture.drawCubeBackGround();
         _camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-        _camera.position.z = 5000;
+        _camera.position.set(0,0,0);
         const cameraHelper = new THREE.CameraHelper( _camera );
         //_scene.add( cameraHelper );
         _axis = new THREE.AxesHelper( 5000 );
@@ -157,7 +156,7 @@ export class Canvas{
 
                 if(shipFBX && photon){
                   let destination = new THREE.Vector3(photon.position.x,photon.position.y,photon.position.z);
-                  console.log(destination);
+                  //console.log(destination);
                   let tween1 = new TWEEN.Tween( shipFBX.position ).to( destination , 10000 );
                   let tween2 = new TWEEN.Tween( shipFBX.scale ).to( {x:shipFBX.scale.x/2,y:shipFBX.scale.y/2,z:shipFBX.scale.z/2} , 10000 );
                   shipFBX.lookAt(destination);
@@ -177,6 +176,7 @@ export class Canvas{
 
    cameraSwitcher(){
      let CDDX = 0.005;
+     
      document.addEventListener("keydown", event => {
          switch(event.key){
            case 'o':
@@ -388,9 +388,8 @@ export class Canvas{
 
         setTimeout(() => {
               shipFBX = ship.draw();
-              shipFBX.position.x = 0;
-              shipFBX.position.y = 0;
-              shipFBX.position.z = 0;
+              shipFBX.position.set(0,0,0);
+          
               if(active){
                 _scene.add(shipFBX);
                 console.log(shipFBX.position);
@@ -418,12 +417,15 @@ export class Canvas{
         document.body.appendChild( _rDomELement );
     }
     addMouseHandler(){
+      const _canvas = document.querySelector('body');
+      const orbitControls = new OrbitControls(_camera,_canvas);
+      orbitControls.autoRotate = true;
         _rDomELement.addEventListener('mousedown',this.onMouseDown,false);
         _rDomELement.addEventListener('mousemove',this.onMouseMove,false);
         _rDomELement.addEventListener('mouseup',this.onMouseUp,false);
     }
     onMouseMove(event){
-       
+      
 
     }
     onMouseUp(){
@@ -434,6 +436,8 @@ export class Canvas{
     onMouseDown(event){
       
         event.preventDefault();
+
+        
 
         let x = event.clientX;
         let y = event.clientY;

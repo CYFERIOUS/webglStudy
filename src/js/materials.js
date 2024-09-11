@@ -10,10 +10,10 @@ let _mPhongMaterial;
 let _mStandardMaterial;
 export class Materials{ 
 
-    constructor(option) {
+    constructor(option,map) {
         switch(option){
             case 1:
-               return this.basicMaterial();
+               return this.basicMaterial(map);
             break;
             case 2:
                 return this.phongMaterial();
@@ -40,11 +40,10 @@ export class Materials{
         }
       }
 
-      basicMaterial(){
+      basicMaterial(map){
         _meshBasicMaterial = new THREE.MeshBasicMaterial({
                     color: 0x35373a,
-                    wireframe:false,
-                    opacity: 1,
+                    map:map
                    
                 });
         return _meshBasicMaterial;
