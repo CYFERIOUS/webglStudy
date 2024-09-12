@@ -5,12 +5,12 @@ import imgb2 from '../images/bump.jpg';
 import imgb3 from '../images/displacementmap.png';
 import imgb4 from '../images/normalMap.jpeg';
 import imgb5 from '../images/textureColor.jpeg';
-import a from '../images/a.png';
-import b from '../images/b.png';
-import c from '../images/c.png';
-import d from '../images/d.png';
-import e from '../images/e.png';
-import f from '../images/f.png';
+import right from '../images/right.png';
+import left from '../images/left.png';
+import top from '../images/top.png';
+import bottom from '../images/bottom.png';
+import rear from '../images/rear.png';
+import front from '../images/front.png';
 
 
 let _texture;
@@ -27,12 +27,12 @@ export class Texture{
       drawCubeBackGround(){
         _cubeBackGround = new THREE.CubeTextureLoader();
         _envTexture = _cubeBackGround.load([
-            a,
-            c,
-            e,
-            f,
-            d,
-            b
+            right,
+            left,
+            top,
+            bottom,
+            rear,
+            front
         ]);
         return _envTexture;
       }
