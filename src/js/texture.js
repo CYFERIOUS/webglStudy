@@ -11,7 +11,7 @@ import top from '../images/top.png';
 import bottom from '../images/bottom.png';
 import rear from '../images/rear.png';
 import front from '../images/front.png';
-
+import mapBasic from '../images/escher.jpg';
 
 let _texture;
 let _cubeBackGround;
@@ -40,7 +40,7 @@ export class Texture{
       draw(option) {
         switch (option) {
             case 1:
-                const loadedT1 = _texture.load(imgb2);
+                const loadedT1 = _texture.load(mapBasic);
                 return loadedT1;
             break;
             case 2:

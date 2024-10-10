@@ -19,7 +19,6 @@ export class Sphere{
         _geosphere = new THREE.SphereGeometry( R, Hs, Vs, 0, random, 0, random);
         
         console.log("popo",basic_material);
-        basic_material.wireframe = true;
         _geoball = new THREE.Mesh( _geosphere, basic_material );
         _geoball.position.x = 0;
         _geoball.position.y = 0;

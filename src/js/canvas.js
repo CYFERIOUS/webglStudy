@@ -62,6 +62,7 @@ let shipFBX;
 let ray;
 let photon;
 let ph;
+let orbitous = false;
 
     
 
@@ -188,7 +189,6 @@ export class Canvas{
              _camera.position.z = 5000;
            break;
            case 'ArrowUp':
-
             _camera.position.y = 5000 * Math.cos(gamma/2);
             _camera.position.z = 5000 * Math.sin(gamma/2);
             _camera.lookAt(0,0,0);
@@ -198,21 +198,21 @@ export class Canvas{
            case 'ArrowDown':
              _camera.position.y = 5000 * Math.cos(gamma/2);
              _camera.position.z = 5000 * Math.sin(gamma/2);
-             _camera.lookAt(0,0,0);
+            // _camera.lookAt(0,0,0);
              _camera.updateProjectionMatrix();
              gamma += CDDX;
            break;
            case 'ArrowRight':
               _camera.position.x = 5000 * Math.cos(gamma);
               _camera.position.z = 5000 * Math.sin(gamma);
-              _camera.lookAt(0,0,0);
+            //  _camera.lookAt(0,0,0);
               _camera.updateProjectionMatrix();
               gamma += CDDX;
            break;
            case 'ArrowLeft':
               _camera.position.x = 5000 * Math.cos(gamma);
               _camera.position.z = 5000 * Math.sin(gamma);
-              _camera.lookAt(0,0,0);
+             // _camera.lookAt(0,0,0);
               _camera.updateProjectionMatrix();
               gamma -= CDDX;
            break;
@@ -406,6 +406,7 @@ export class Canvas{
           this.geometrySwitcher();
           this.lightSwitcher();
           this.animationSwitcher();
+         
 
           _camera.aspect = renderWidth/renderHeight;
           _camera.updateProjectionMatrix();
@@ -420,12 +421,13 @@ export class Canvas{
       const _canvas = document.querySelector('body');
       const orbitControls = new OrbitControls(_camera,_canvas);
       orbitControls.autoRotate = true;
+
         _rDomELement.addEventListener('mousedown',this.onMouseDown,false);
         _rDomELement.addEventListener('mousemove',this.onMouseMove,false);
         _rDomELement.addEventListener('mouseup',this.onMouseUp,false);
     }
     onMouseMove(event){
-      
+      orbitous = true;
 
     }
     onMouseUp(){
@@ -437,17 +439,13 @@ export class Canvas{
       
         event.preventDefault();
 
-        
-
         let x = event.clientX;
         let y = event.clientY;
 
         mouse.x = (x/window.innerWidth)*2-1;
         mouse.y = -(y/window.innerHeight)*2+1;
         mouse.z = 1;
-        //console.log('x'+mouse.x);
-        //console.log('y'+mouse.y);
-
+      
         ray = new Raycaster(mouse,_camera);
         photon = ray.draw();
         ray.intersectObjects(_scene);
@@ -457,7 +455,7 @@ export class Canvas{
         _scene.add( photon );
      
         for(let i in _currentGeo){
-       
+          
           const  OBJ = _currentGeo[i].clone();
           OBJ.position.x = photon.position.x;
           OBJ.position.y = photon.position.y;
@@ -467,8 +465,6 @@ export class Canvas{
           OBJ.scale.z = 0.3;
           _sceneObjectsPile.push(OBJ);
           _scene.add(OBJ);
-         
-          
         }
     }
     
