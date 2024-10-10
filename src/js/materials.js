@@ -55,11 +55,11 @@ export class Materials{
 
       basicMaterial(){
         const mapBasic = new Texture();
-        _meshBasicMaterial = new THREE.MeshBasicMaterial({
-                    map:mapBasic.draw(1),
-                    opacity:0.2,
-                    side:THREE.DoubleSide
-                });
+        _meshBasicMaterial  = new THREE.MeshBasicMaterial();
+        _meshBasicMaterial.map = mapBasic.draw(1);
+        _meshBasicMaterial.transparent = true;
+        _meshBasicMaterial.opacity = 0.4;
+        _meshBasicMaterial.side = THREE.DoubleSide;
         return _meshBasicMaterial;
          
       }
