@@ -43,93 +43,88 @@ export class Materials{
             break;
             case 9:
                 return this.pointMaterial();
-            break;
-            
-            
-            case 8:
-                return this.standardMaterial();
-            break;
-
+            break;            
+      
         }
       }
 
       basicMaterial(){
         const mapBasic = new Texture();
-        _meshBasicMaterial  = new THREE.MeshBasicMaterial();
-        _meshBasicMaterial.map = mapBasic.draw(1);
-        _meshBasicMaterial.transparent = true;
-        _meshBasicMaterial.opacity = 0.4;
-        _meshBasicMaterial.side = THREE.DoubleSide;
+          _meshBasicMaterial  = new THREE.MeshBasicMaterial();
+          _meshBasicMaterial.map = mapBasic.draw("cube");
+          _meshBasicMaterial.transparent = true;
+          _meshBasicMaterial.opacity = 0.4;
+          _meshBasicMaterial.side = THREE.DoubleSide;
         return _meshBasicMaterial;
          
       }
       depthMaterial(){
-        _mDepthMaterial = new THREE.MeshDepthMaterial({
-                    opacity: 0.3,
-                    transparent: true,});
+          const mapDepth = new Texture();
+          _mDepthMaterial = new THREE.MeshStandardMaterial();
+          _mDepthMaterial.side=THREE.FrontSide;
+          _mDepthMaterial.map = mapDepth.draw("messier");
+          _mDepthMaterial.displacementMap = mapDepth.draw("sphere");
+          _mDepthMaterial.opacity =1;
+         
         return _mDepthMaterial;
       }
       normalMaterial(){
-        _mNormalMaterial = new THREE.MeshNormalMaterial({
-                    opacity: 0.3,
-                    transparent: true,});
+       
+          _mNormalMaterial = new THREE.MeshNormalMaterial();
+          _mNormalMaterial.opacity = 0.3;
+          _mNormalMaterial.transparent = true;
         return _mNormalMaterial;
       }
 
       matCaplMaterial(){
-        _mMatCapMaterial = new THREE.MeshMatcapMaterial({
-                    opacity: 0.3,
-                    transparent: true,});
+          _mMatCapMaterial = new THREE.MeshMatcapMaterial();
+          _mMatCapMaterial.opacity = 0.3;
+          _mMatCapMaterial.transparent = true;
         return  _mMatCapMaterial;
       }
       lambertMaterial(){
-        _mLambertMaterial = new THREE.MeshLambertMaterial({
-                    side:THREE.DoubleSide,
-                     color: 0x03b7fa,
-                     emisive:0xE38949,
-                     emisiveIntensity:1
-                    });
+          _mLambertMaterial = new THREE.MeshLambertMaterial();
+          _mLambertMaterial.side=THREE.DoubleSide;
+          _mLambertMaterial.color=0x03b7fa;
+          _mLambertMaterial.emisive=0xE38949;
+          _mLambertMaterial.emisiveIntensity=1;
         return _mLambertMaterial;
       }
 
       phongMaterial(){
-        _mPhongMaterial = new THREE.MeshPhongMaterial({
-                    side:THREE.DoubleSide,
-                     color: 0x03b7fa,
-                     emisive:0xE38949,
-                     emisiveIntensity:1,
-                     shininess:100
-                    });
+        _mPhongMaterial = new THREE.MeshPhongMaterial();
+        _mPhongMaterial.side=THREE.DoubleSide;
+        _mPhongMaterial.color= 0x03b7fa;
+        _mPhongMaterial.emisive=0xE38949;
+        _mPhongMaterial.emisiveIntensity=1;
+        _mPhongMaterial.shininess=100;
         return _mPhongMaterial;
       }
 
       toonMaterial(){
-        _mToonMaterial = new THREE.MeshToonMaterial({
-                    side:THREE.DoubleSide,
-                     color: 0x03b7fa,
-                     emisive:0xE38949,
-                     emisiveIntensity:1,
-                     shininess:100
-                    });
+          _mToonMaterial = new THREE.MeshToonMaterial();
+          _mToonMaterial.side=THREE.DoubleSide;
+          _mToonMaterial.color= 0x03b7fa;
+          _mToonMaterial.emisive=0xE38949;
+          _mToonMaterial.emisiveIntensity=1;
+          _mToonMaterial.shininess=100;
         return _mToonMaterial;
       }
 
       standardMaterial(){
-        _mStandardMaterial = new THREE.MeshPhongMaterial({
-                    side:THREE.DoubleSide,
-                     color: 0x03b7fa,
-                      opacity: 0.5,
-                    transparent: true,
-                     emisive:0xE38949,
-                     emisiveIntensity:0.3,
-                     metalness:1
-                    });
+        _mStandardMaterial = new THREE.MeshStandardMaterial();
+          _mStandardMaterial.side=THREE.DoubleSide;
+          _mStandardMaterial.color= 0x03b7fa;
+          _mStandardMaterial.opacity= 0.5;
+          _mStandardMaterial.transparent= true;
+          _mStandardMaterial.emisive=0xE38949;
+          _mStandardMaterial.emisiveIntensity=0.3;
+          _mStandardMaterial.metalness=1;
         return _mStandardMaterial;
       }
       pointMaterial(){
-        _mPointMaterial = new THREE.PointsMaterial({
-                     color: 0x000000,
-                    });
+        _mPointMaterial = new THREE.PointsMaterial();
+        _mPointMaterial.color= 0x000000;
         return _mPointMaterial;
       }
 

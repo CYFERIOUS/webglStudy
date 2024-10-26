@@ -1,17 +1,22 @@
 import * as THREE from 'three';
 
 import imgb from '../images/cosmic.jpg';
-import imgb2 from '../images/bump.jpg';
-import imgb3 from '../images/displacementmap.png';
-import imgb4 from '../images/normalMap.jpeg';
-import imgb5 from '../images/textureColor.jpeg';
+
+import mapBasic from '../images/escher.jpg';
+import displacementMap from '../images/displacementmap.png';
+import orion from '../images/orion.jpg';
+import eyegod from '../images/eyegod.jpeg';
+import messier from '../images/Messier.jpg';
+import textureColor from '../images/textureColor.jpeg';
+//background cube 360
 import right from '../images/right.png';
 import left from '../images/left.png';
 import top from '../images/top.png';
 import bottom from '../images/bottom.png';
 import rear from '../images/rear.png';
 import front from '../images/front.png';
-import mapBasic from '../images/escher.jpg';
+
+
 
 let _texture;
 let _cubeBackGround;
@@ -39,21 +44,25 @@ export class Texture{
 
       draw(option) {
         switch (option) {
-            case 1:
-                const loadedT1 = _texture.load(mapBasic);
-                return loadedT1;
+            case "cube":
+              return _texture.load(mapBasic);
+            
             break;
-            case 2:
-                const loadedT2 = _texture.load(imgb3);
-                return loadedT2;
+            case "sphere":
+              return _texture.load(displacementMap);
+               
             break;
-            case 3:
-                const loadedT3 = _texture.load(imgb4);
-                return loadedT3;
+            case "orion":
+              return _texture.load(orion);
+                
             break;
-            case 4:
-                const loadedT4 = _texture.load(imgb5);
-                return loadedT4;
+            case "eyegod":
+              return _texture.load(eyegod);
+                
+            break;
+            case "messier":
+              return _texture.load(messier);
+                
             break;
         
             default:

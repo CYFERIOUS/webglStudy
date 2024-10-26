@@ -8,18 +8,16 @@ let _size = new Array(200,400,600,800,1000,1200,1400,1600);
 let _pile = new Array();
 
 const texture = new Texture();
-const bumpText =  texture.draw(4);
-const basic_material = new Materials(1,bumpText);
+const depth_material = new Materials(2);
 
 export class Sphere{
     constructor(R,Hs,Vs) {
 
-        var random = Math.round(Math.random() * (Math.PI*2 - 0) + 0);
+        //var random = Math.round(Math.random() * (Math.PI*2 - 0) + 0);
 
-        _geosphere = new THREE.SphereGeometry( R, Hs, Vs, 0, random, 0, random);
+        _geosphere = new THREE.SphereGeometry( R, Hs, Vs, 0, 360, 0, 360);
         
-        console.log("popo",basic_material);
-        _geoball = new THREE.Mesh( _geosphere, basic_material );
+        _geoball = new THREE.Mesh( _geosphere, depth_material );
         _geoball.position.x = 0;
         _geoball.position.y = 0;
         _geoball.position.z = 0;

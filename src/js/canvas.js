@@ -92,6 +92,7 @@ export class Canvas{
         _axis.position.set( 0, 0, 0 );
         //_scene.add(_axis);
         _scene.add(_camera);
+      
         this.geometries();
         
         lights = new LightManager(_scene);

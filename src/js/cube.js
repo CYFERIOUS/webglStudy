@@ -7,7 +7,7 @@ let _size = new Array(200,400,600,800,1000,1200,1400,1600,1800,2000,2200);
 let _pile = new Array();
 
 
-const basic_material = new Materials(1);
+const basic_material = new Materials("cube");
 
 export class Cube{
     constructor(sizeX,sizeY,sizeZ) {
