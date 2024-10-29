@@ -62,7 +62,7 @@ export class Materials{
           const mapDepth = new Texture();
           _mDepthMaterial = new THREE.MeshStandardMaterial();
           _mDepthMaterial.side=THREE.FrontSide;
-          _mDepthMaterial.map = mapDepth.draw("messier");
+          _mDepthMaterial.map = mapDepth.draw("orion");
           _mDepthMaterial.displacementMap = mapDepth.draw("sphere");
           _mDepthMaterial.opacity =1;
          
