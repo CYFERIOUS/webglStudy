@@ -51,7 +51,7 @@ export class Light{
 	}
 
 	ambientLight(){
-		  _ambient = new THREE.AmbientLight( 0x29EB41 );
+		  _ambient = new THREE.AmbientLight( 0xFFFFFF );
 	}
 
 	hemisphereLight(){

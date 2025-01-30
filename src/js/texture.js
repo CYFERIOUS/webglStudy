@@ -4,8 +4,9 @@ import imgb from '../images/cosmic.jpg';
 
 import mapBasic from '../images/escher.jpg';
 import displacementMap from '../images/displacementmap.png';
+import crater from '../images/crater.jpg';
 import orion from '../images/orion.jpg';
-import eyegod from '../images/eyegod.jpeg';
+import eyegod from '../images/eyegod.jpg';
 import messier from '../images/Messier.jpg';
 import textureColor from '../images/textureColor.jpeg';
 //background cube 360
@@ -24,6 +25,7 @@ let _envTexture;
 export class Texture{
     constructor() {
         _texture = new THREE.TextureLoader();
+        
       }
 
       drawBackGround(){
@@ -48,13 +50,14 @@ export class Texture{
               return _texture.load(mapBasic);
             
             break;
-            case "sphere":
+            case "crater":
+              return _texture.load(crater);
+            break;
+            case "craterMap":
               return _texture.load(displacementMap);
-               
             break;
             case "orion":
               return _texture.load(orion);
-                
             break;
             case "eyegod":
               return _texture.load(eyegod);
@@ -62,9 +65,8 @@ export class Texture{
             break;
             case "messier":
               return _texture.load(messier);
-                
             break;
-        
+           
             default:
                 break;
         }

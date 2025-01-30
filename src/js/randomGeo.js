@@ -7,7 +7,7 @@ let _size = new Array(100,200,300,400,500,600,700,800,900,1000);
 let _pile = new Array();
 
 
-const basic_material = new Materials(6);
+const basic_material = new Materials(1);
 
 export class RandomGeo{
     constructor(A,B,C,D) {

@@ -4,11 +4,10 @@ import { Texture } from './texture.js'
 
 let _geosphere;
 let _geoball;
-let _size = new Array(200,400,600,800,1000,1200,1400,1600);
+let _size = new Array(200,600,1000,1400);
 let _pile = new Array();
 
-const texture = new Texture();
-const depth_material = new Materials(2);
+const depth_material = new Materials(8);
 
 export class Sphere{
     constructor(R,Hs,Vs) {
@@ -18,6 +17,7 @@ export class Sphere{
         _geosphere = new THREE.SphereGeometry( R, Hs, Vs, 0, 360, 0, 360);
         
         _geoball = new THREE.Mesh( _geosphere, depth_material );
+        
         _geoball.position.x = 0;
         _geoball.position.y = 0;
         _geoball.position.z = 0;
@@ -28,7 +28,7 @@ export class Sphere{
 
       createMatrix(){
          for(let i of _size){
-            this.constructor(i,30,30);
+            this.constructor(i,100,100);
           }
       }
 

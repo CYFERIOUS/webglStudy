@@ -28,7 +28,6 @@ let _animating = true;
 let _sphere = new Array();
 let _torus = new Array();
 let _geoRand = new Array();
-let _currentCopy = new Array();
 let _octahedron = new Array(1000,1000,1000,1000,500);
 
 let _llanura = new Array();
@@ -38,22 +37,24 @@ let normals = new Array();
 let _currentGeo = new Array();
 let _starShape = new Array();
 let _sceneObjectsPile = new Array();
+let _sceneLightsPile = new Array();
 
 const cube = new Cube(100,100,100);
-const sphere = new Sphere(500,30,30);
+const sphere = new Sphere(500,300,300);
 const torus = new Torus(100,20,30,30);
 const randomShape = new RandomGeo(100,100,100,100);
 const octahedron = new Octahedron(100,100,100,100,100);
 const rtrigono = new RandomTriangle(1000,1000,1000);
 const planicie = new Plane(10000,10000,10,10);
-const ship = new Modeloader();
+const ship = new Modeloader("glb");
 const startoko = new Startrek(100,100,100);
 const clock = new THREE.Clock(); 
 const texture = new Texture();
 
 
-let lights;
 
+let lights;
+let ambientLight;
 let gamma = 0;
 let ball;
 let cameraBall;
@@ -92,10 +93,11 @@ export class Canvas{
         _axis.position.set( 0, 0, 0 );
         //_scene.add(_axis);
         _scene.add(_camera);
-      
+        
         this.geometries();
         
         lights = new LightManager(_scene);
+        
     }
 
 
@@ -123,7 +125,7 @@ export class Canvas{
         requestAnimationFrame(() =>{
          
             this.animate();
-            
+            ship.animate();
             //angularVelocity
             let ADDX = 0.05;
             let ADDY = 0.03;
@@ -154,8 +156,6 @@ export class Canvas{
             }
             
             if(_animating){
-               
-
                 if(shipFBX && photon){
                   let destination = new THREE.Vector3(photon.position.x,photon.position.y,photon.position.z);
                   //console.log(destination);
@@ -165,9 +165,6 @@ export class Canvas{
                   tween1.start();
                   tween2.start();
                 }
-
-
-
             }
               TWEEN.update(time);
             _renderer.render( _scene, _camera );
@@ -224,9 +221,9 @@ export class Canvas{
    }
 
    geometrySwitcher(){
-     //this.primitiveAdder(true,_cubo);
-    // _currentGeo = _cubo;
-     
+     this.primitiveAdder(true,_cubo);
+     _currentGeo = _cubo;
+    
      document.addEventListener("keydown", (e) => {
          switch(e.key){
              case '1':
@@ -237,7 +234,6 @@ export class Canvas{
               this.primitiveAdder(false,_octahedron);
               this.primitiveAdder(false,_rt);
               this.shipMaker(true);
-              activeNormals = !activeNormals;
              break;
              case '2':
               this.normalsAdder(false,_currentGeo);
@@ -248,8 +244,8 @@ export class Canvas{
               this.primitiveAdder(false,_octahedron);
               this.primitiveAdder(false,_geoRand);
               this.primitiveAdder(false,_rt); 
-              this.normalsAdder(activeNormals,_currentGeo);
-              activeNormals = !activeNormals;
+              //this.normalsAdder(activeNormals,_currentGeo);
+              //activeNormals = !activeNormals;
              break;
              case '3':
               this.normalsAdder(false,_currentGeo);
@@ -260,8 +256,8 @@ export class Canvas{
               this.primitiveAdder(false,_octahedron);
               this.primitiveAdder(false,_geoRand);
               this.primitiveAdder(false,_rt);
-              this.normalsAdder(activeNormals,_currentGeo);
-              activeNormals = !activeNormals;  
+              //this.normalsAdder(activeNormals,_currentGeo);
+              //activeNormals = !activeNormals;  
              break;
              case '4':
               this.normalsAdder(false,_currentGeo);
@@ -272,8 +268,8 @@ export class Canvas{
               this.primitiveAdder(false,_octahedron);
               this.primitiveAdder(false,_rt);
               this.primitiveAdder(false,_geoRand);
-              this.normalsAdder(activeNormals,_currentGeo);
-              activeNormals = !activeNormals; 
+              //this.normalsAdder(activeNormals,_currentGeo);
+              //activeNormals = !activeNormals; 
              break;
              case '5':
                 this.normalsAdder(false,_currentGeo);
@@ -284,8 +280,8 @@ export class Canvas{
                 this.primitiveAdder(false,_octahedron);
                 this.primitiveAdder(false,_rt);
                 this.primitiveAdder(true,_geoRand);
-                this.normalsAdder(activeNormals,_currentGeo);
-                activeNormals = !activeNormals; 
+                //this.normalsAdder(activeNormals,_currentGeo);
+                //activeNormals = !activeNormals; 
              break;
              case '6':
                 this.normalsAdder(false,_currentGeo);
@@ -296,8 +292,8 @@ export class Canvas{
                 this.primitiveAdder(false,_geoRand);
                 this.primitiveAdder(false,_rt);
                 this.primitiveAdder(true,_currentGeo);
-                this.normalsAdder(activeNormals,_currentGeo);
-                activeNormals = !activeNormals;
+                //this.normalsAdder(activeNormals,_currentGeo);
+                //activeNormals = !activeNormals;
              break;
              case '7':
               this.normalsAdder(false,_currentGeo);
@@ -307,8 +303,8 @@ export class Canvas{
                  this.primitiveAdder(false,_torus);
                  this.primitiveAdder(false,_geoRand);
                  this.primitiveAdder(false,_octahedron);
-                 this.primitiveAdder(true,_currentGeo);
-                 activeNormals = !activeNormals;
+                 //this.primitiveAdder(true,_currentGeo);
+                 //activeNormals = !activeNormals;
              break;
              case '8':  
                   _currentGeo = _starShape;
@@ -320,7 +316,6 @@ export class Canvas{
                   this.primitiveAdder(false,_octahedron);
                   this.primitiveAdder(false,_rt);
                   _scene.add(_currentGeo);
-                  activeNormals = !activeNormals;
              break;
 
            }
@@ -424,20 +419,34 @@ export class Canvas{
       orbitControls.autoRotate = true;
 
         _rDomELement.addEventListener('mousedown',this.onMouseDown,false);
+        window.addEventListener('mouseup',this.onMouseUp,false);
         _rDomELement.addEventListener('mousemove',this.onMouseMove,false);
-        _rDomELement.addEventListener('mouseup',this.onMouseUp,false);
+       
     }
     onMouseMove(event){
       orbitous = true;
-
+      event.preventDefault();
     }
-    onMouseUp(){
-      
+    onMouseUp(event){
+      event.preventDefault();
+      orbitous = false;
+      window.setInterval(()=>{
+        for(let i in _sceneObjectsPile){
+          let object = _sceneObjectsPile[i];
+          _scene.remove(object);
+          _sceneObjectsPile.splice(i, 1); 
+        }
+        for(let i in _sceneLightsPile){
+          let light = _sceneLightsPile[i];
+          _scene.remove(light);
+          _sceneLightsPile.splice(i, 1); 
+        }
+      },100000);
     }
 
 
     onMouseDown(event){
-      
+     
         event.preventDefault();
 
         let x = event.clientX;
@@ -451,12 +460,12 @@ export class Canvas{
         photon = ray.draw();
         ray.intersectObjects(_scene);
         ph = new THREE.PointLightHelper( photon, 5 );
-      
+
+        _sceneLightsPile.push(photon);
         _scene.add(ph);
         _scene.add( photon );
-     
+        
         for(let i in _currentGeo){
-          
           const  OBJ = _currentGeo[i].clone();
           OBJ.position.x = photon.position.x;
           OBJ.position.y = photon.position.y;
@@ -466,9 +475,11 @@ export class Canvas{
           OBJ.scale.z = 0.3;
           _sceneObjectsPile.push(OBJ);
           _scene.add(OBJ);
+         
         }
     }
-    
+
+   
 
 }
 

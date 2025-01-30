@@ -59,14 +59,17 @@ export class Materials{
          
       }
       depthMaterial(){
-          const mapDepth = new Texture();
-          _mDepthMaterial = new THREE.MeshStandardMaterial();
-          _mDepthMaterial.side=THREE.FrontSide;
-          _mDepthMaterial.map = mapDepth.draw("orion");
-          _mDepthMaterial.displacementMap = mapDepth.draw("sphere");
-          _mDepthMaterial.opacity =1;
-         
-        return _mDepthMaterial;
+
+        _mDepthMaterial = new THREE.MeshDepthMaterial();
+        _mDepthMaterial.side=THREE.DoubleSide;
+        _mDepthMaterial.color= 0x03b7fa;
+        _mDepthMaterial.opacity= 0.5;
+        _mDepthMaterial.transparent= false;
+        _mDepthMaterial.emisive=0xE38949;
+        _mDepthMaterial.emisiveIntensity=0.3;
+        _mDepthMaterial.metalness=1;
+
+      return  _mDepthMaterial;
       }
       normalMaterial(){
        
@@ -93,11 +96,11 @@ export class Materials{
 
       phongMaterial(){
         _mPhongMaterial = new THREE.MeshPhongMaterial();
-        _mPhongMaterial.side=THREE.DoubleSide;
-        _mPhongMaterial.color= 0x03b7fa;
-        _mPhongMaterial.emisive=0xE38949;
-        _mPhongMaterial.emisiveIntensity=1;
-        _mPhongMaterial.shininess=100;
+        _mPhongMaterial.side=THREE.FrontSide;
+        //_mPhongMaterial.color= 0x03b7fa;
+        //_mPhongMaterial.emisive=0xE38949;
+        //_mPhongMaterial.emisiveIntensity=1;
+        //_mPhongMaterial.shininess=100;
         return _mPhongMaterial;
       }
 
@@ -112,15 +115,18 @@ export class Materials{
       }
 
       standardMaterial(){
+        const texturor = new Texture();
+
         _mStandardMaterial = new THREE.MeshStandardMaterial();
-          _mStandardMaterial.side=THREE.DoubleSide;
-          _mStandardMaterial.color= 0x03b7fa;
-          _mStandardMaterial.opacity= 0.5;
-          _mStandardMaterial.transparent= true;
-          _mStandardMaterial.emisive=0xE38949;
-          _mStandardMaterial.emisiveIntensity=0.3;
-          _mStandardMaterial.metalness=1;
-        return _mStandardMaterial;
+        _mStandardMaterial.side=THREE.FrontSide;
+        _mStandardMaterial.map = texturor.draw("crater");
+        _mStandardMaterial.displacementMap = texturor.draw("craterMap");
+        _mStandardMaterial.displacementScale = 0.1;
+        _mStandardMaterial.displacementBias = 0.5;
+        _mStandardMaterial.transparent = true;
+        _mStandardMaterial.opacity = 0.8;
+      
+      return _mStandardMaterial;
       }
       pointMaterial(){
         _mPointMaterial = new THREE.PointsMaterial();
