@@ -65,6 +65,7 @@ let photon;
 let ph;
 let orbitous = false;
 
+
     
 
 export class Canvas{
@@ -125,7 +126,7 @@ export class Canvas{
         requestAnimationFrame(() =>{
          
             this.animate();
-            ship.animate();
+            
             //angularVelocity
             let ADDX = 0.05;
             let ADDY = 0.03;
@@ -154,9 +155,10 @@ export class Canvas{
             for (let i in normals){
                 normals[i].update();
             }
-            
+           
             if(_animating){
                 if(shipFBX && photon){
+                  ship.animate();
                   let destination = new THREE.Vector3(photon.position.x,photon.position.y,photon.position.z);
                   //console.log(destination);
                   let tween1 = new TWEEN.Tween( shipFBX.position ).to( destination , 10000 );
@@ -382,10 +384,9 @@ export class Canvas{
 
     shipMaker(active){
 
+      shipFBX = ship.draw();
+      shipFBX.position.set(0,0,0);
         setTimeout(() => {
-              shipFBX = ship.draw();
-              shipFBX.position.set(0,0,0);
-          
               if(active){
                 _scene.add(shipFBX);
                 console.log(shipFBX.position);

@@ -5,7 +5,7 @@ import { GLTFLoader } from '../../node_modules/three/examples/jsm/loaders/GLTFLo
 import {Materials} from './materials.js';
 
 import spaceShip from '../models/nave.fbx';
-import argonaut from '../models/astronauta2.glb';
+import argonaut from '../models/astronaut.glb';
 
 let model =  new THREE.Object3D();
 const ship_material = new Materials(6);
@@ -21,7 +21,7 @@ const clock = new THREE.Clock();
 export class Modeloader{
     
   
-    
+  
     constructor(option) {
       
         switch (option) {
@@ -95,12 +95,13 @@ export class Modeloader{
       );
     }
 
-  previousTime = 0;
-  animate(time){
-      let myInterval;
+    previousTime = 0;
+  animate(){
+    
       const elapsedTime = clock.getElapsedTime();
       const frameTime = elapsedTime - this.previousTime;
       this.previousTime = elapsedTime;
+      
       if(this.animationMixer){
         this.animationMixer.update(frameTime);
       }
