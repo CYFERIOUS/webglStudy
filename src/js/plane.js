@@ -1,12 +1,14 @@
 import * as THREE from 'three';
 import {Materials} from './materials.js';
+import { Shaders } from './shaders.js';
 
 let _plane;
 let _plano;
-let _size = new Array(1000);
+let _size = new Array(10,20,30,40,50,60);
 let _pile = new Array();
 
-const phong_material = new Materials(1);
+const shader_material = new Shaders();
+const basic_material = new Materials(1);
 
 
 export class Plane{ 
@@ -14,9 +16,10 @@ export class Plane{
       
         _plane = new THREE.PlaneGeometry(sizeX, sizeY, DivX,DivY);
         
+        console.log("shader!",shader_material.getShader())
 
-        _plano = new THREE.Mesh( _plane, phong_material  );
-        _plano.rotation.x = -Math.PI/3;
+        _plano = new THREE.Mesh( _plane, shader_material.getShader()  );
+        
         _plano.position.x = 0;
         _plano.position.y = 0;
         _plano.position.z = 0;

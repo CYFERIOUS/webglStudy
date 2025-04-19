@@ -56,7 +56,6 @@ const texture = new Texture();
 let lights;
 let ambientLight;
 let gamma = 0;
-let ball;
 let cameraBall;
 let mouse = {};
 let shipFBX;
@@ -223,9 +222,7 @@ export class Canvas{
    }
 
    geometrySwitcher(){
-     this.primitiveAdder(true,_cubo);
-     _currentGeo = _cubo;
-    
+   
      document.addEventListener("keydown", (e) => {
          switch(e.key){
              case '1':
@@ -317,6 +314,19 @@ export class Canvas{
                   this.primitiveAdder(false,_geoRand);
                   this.primitiveAdder(false,_octahedron);
                   this.primitiveAdder(false,_rt);
+                  _scene.add(_currentGeo);
+             break;
+             case '9':  
+                  _currentGeo = _llanura;
+                  this.primitiveAdder(true,_currentGeo);
+                  this.primitiveAdder(false,_cubo);
+                  this.primitiveAdder(false,_sphere);
+                  this.primitiveAdder(false,_torus);
+                  this.primitiveAdder(false,_geoRand);
+                  this.primitiveAdder(false,_octahedron);
+                  this.primitiveAdder(false,_rt);
+                  this.primitiveAdder(false,_starShape);
+                  console.log(_currentGeo);
                   _scene.add(_currentGeo);
              break;
 
@@ -467,6 +477,7 @@ export class Canvas{
         _scene.add( photon );
         
         for(let i in _currentGeo){
+          console.log(_currentGeo);
           const  OBJ = _currentGeo[i].clone();
           OBJ.position.x = photon.position.x;
           OBJ.position.y = photon.position.y;
