@@ -45,7 +45,7 @@ const torus = new Torus(100,20,30,30);
 const randomShape = new RandomGeo(100,100,100,100);
 const octahedron = new Octahedron(100,100,100,100,100);
 const rtrigono = new RandomTriangle(1000,1000,1000);
-const planicie = new Plane(10000,10000,10,10);
+const planicie = new Plane(1000,1000,10,10);
 const ship = new Modeloader("glb");
 const startoko = new Startrek(100,100,100);
 const clock = new THREE.Clock(); 
@@ -474,7 +474,7 @@ export class Canvas{
 
         _sceneLightsPile.push(photon);
         _scene.add(ph);
-        _scene.add( photon );
+        //_scene.add( photon );
         
         for(let i in _currentGeo){
           console.log(_currentGeo);
@@ -482,9 +482,9 @@ export class Canvas{
           OBJ.position.x = photon.position.x;
           OBJ.position.y = photon.position.y;
           OBJ.position.z = photon.position.z;
-          OBJ.scale.x = 0.3;
-          OBJ.scale.y = 0.3;
-          OBJ.scale.z = 0.3;
+          OBJ.scale.x =  Math.floor(Math.random() * 20) + 1;
+          OBJ.scale.y =  Math.floor(Math.random() * 20) + 1;
+          OBJ.scale.z = Math.floor(Math.random() * 20) + 1;
           _sceneObjectsPile.push(OBJ);
           _scene.add(OBJ);
          

@@ -4,7 +4,7 @@ import { Shaders } from './shaders.js';
 
 let _plane;
 let _plano;
-let _size = new Array(10,20,30,40,50,60);
+let _size = new Array(1000,2000);
 let _pile = new Array();
 
 const shader_material = new Shaders();
@@ -14,7 +14,7 @@ const basic_material = new Materials(1);
 export class Plane{ 
     constructor(sizeX,sizeY,DivX,DivY) {
       
-        _plane = new THREE.PlaneGeometry(sizeX, sizeY, DivX,DivY);
+        _plane = new THREE.PlaneBufferGeometry(sizeX, sizeY, DivX,DivY);
         
         console.log("shader!",shader_material.getShader())
 
@@ -23,6 +23,15 @@ export class Plane{
         _plano.position.x = 0;
         _plano.position.y = 0;
         _plano.position.z = 0;
+
+        const amount = _plane.attributes.position.count;
+        const newAttrArray = new Float32Array(amount);
+
+        for(let i = 0; i<amount; i++){
+          newAttrArray[i] = Math.floor(Math.random() * 200) + 1;
+        }
+
+        _plane.setAttribute("a_modulus", new THREE.BufferAttribute(newAttrArray,1))
 
         _pile.push (_plano);
      
