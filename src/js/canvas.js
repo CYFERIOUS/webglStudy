@@ -16,6 +16,8 @@ import {OrbitControls} from '../../node_modules/three/examples/jsm/controls/Orbi
 import { Modeloader} from './modeloader.js'
 import { Raycaster } from './raycaster.js'
 import { Texture } from './texture.js'
+import { Shaders } from './shaders.js';
+
 
 
 let _scene;
@@ -39,17 +41,26 @@ let _starShape = new Array();
 let _sceneObjectsPile = new Array();
 let _sceneLightsPile = new Array();
 
+const cursor = {
+  x:0,
+  y:0
+}
+
 const cube = new Cube(100,100,100);
 const sphere = new Sphere(500,300,300);
 const torus = new Torus(100,20,30,30);
 const randomShape = new RandomGeo(100,100,100,100);
 const octahedron = new Octahedron(100,100,100,100,100);
 const rtrigono = new RandomTriangle(1000,1000,1000);
-const planicie = new Plane(1000,1000,10,10);
+const planicie = new Plane(1,1,10,10);
 const ship = new Modeloader("glb");
 const startoko = new Startrek(100,100,100);
 const clock = new THREE.Clock(); 
 const texture = new Texture();
+const objShader = new Shaders();
+const matShader = objShader.getShader();
+
+
 
 
 
@@ -91,12 +102,14 @@ export class Canvas{
         //_scene.add( cameraHelper );
         _axis = new THREE.AxesHelper( 5000 );
         _axis.position.set( 0, 0, 0 );
+        
         //_scene.add(_axis);
         _scene.add(_camera);
         
         this.geometries();
         
         lights = new LightManager(_scene);
+
         
     }
 
@@ -123,7 +136,12 @@ export class Canvas{
 
       const elapsedTime = clock.getElapsedTime();
         requestAnimationFrame(() =>{
-         
+          
+        planicie.animation(elapsedTime);
+        objShader.setMouse(cursor.x, cursor.y);
+        
+        
+        
             this.animate();
             
             //angularVelocity
@@ -433,11 +451,24 @@ export class Canvas{
         window.addEventListener('mouseup',this.onMouseUp,false);
         _rDomELement.addEventListener('mousemove',this.onMouseMove,false);
        
+       
+        
+       
     }
+    
     onMouseMove(event){
       orbitous = true;
       event.preventDefault();
+     cursor.x = event.clientX / window.innerWidth;
+     cursor.y = event.clientY / window.innerHeight;
+
+    
+     
     }
+
+   
+
+
     onMouseUp(event){
       event.preventDefault();
       orbitous = false;
@@ -475,21 +506,27 @@ export class Canvas{
         _sceneLightsPile.push(photon);
         _scene.add(ph);
         //_scene.add( photon );
+
+       
+
         
         for(let i in _currentGeo){
           console.log(_currentGeo);
           const  OBJ = _currentGeo[i].clone();
+          OBJ.material =_currentGeo[i].material;
           OBJ.position.x = photon.position.x;
           OBJ.position.y = photon.position.y;
           OBJ.position.z = photon.position.z;
           OBJ.scale.x =  Math.floor(Math.random() * 20) + 1;
           OBJ.scale.y =  Math.floor(Math.random() * 20) + 1;
           OBJ.scale.z = Math.floor(Math.random() * 20) + 1;
+          OBJ.material = objShader.getShader();
           _sceneObjectsPile.push(OBJ);
           _scene.add(OBJ);
          
         }
     }
+     
 
    
 
