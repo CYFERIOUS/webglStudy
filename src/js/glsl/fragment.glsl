@@ -9,6 +9,7 @@ uniform float u_time_color;
 uniform vec2 u_cursor_color;
 
 void main(){
+
     gl_FragColor = vec4(  u_cursor_color.x,u_cursor_color.y,1.0, 1.0);
     
     /*gl_FragColor.r = 10.0+sin(u_time_color);
