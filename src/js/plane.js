@@ -45,7 +45,7 @@ export class Plane{
 
       createMatrix(){
          for(let i = 0; i <= _size.length; i++){
-            this.constructor(i*100,i*100,100,100); 
+            this.constructor(i*1000,i*1000,100,100); 
           }
       }
     

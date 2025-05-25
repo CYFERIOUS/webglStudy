@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import vshader from './glsl/vertex.glsl';
-import fshader from './glsl/distanceFragment.glsl';
+import fshader from './glsl/noise2.glsl';
 
 let material;
 let mousex;

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {Materials} from './materials.js';
-
+import { Shaders } from './shaders.js';
 
 let _geometry;
 let _geometro;
@@ -9,11 +9,14 @@ let _pile = new Array();
 
 
 const basic_material = new Materials(1);
+const shader_material = new Shaders();
 
 export class Cube{
     constructor(sizeX,sizeY,sizeZ) {
         _geometry = new THREE.BoxGeometry( sizeX, sizeY, sizeZ );
-        _geometro = new THREE.Mesh( _geometry, basic_material  );
+        this._shaderEst = shader_material.getShader();
+    
+        _geometro = new THREE.Mesh( _geometry, this._shaderEst );
         _geometro.position.x = 0;
         _geometro.position.y = 0;
         _geometro.position.z = 0;

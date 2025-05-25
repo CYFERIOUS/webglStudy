@@ -505,7 +505,7 @@ export class Canvas{
 
         _sceneLightsPile.push(photon);
         _scene.add(ph);
-        //_scene.add( photon );
+        _scene.add( photon );
 
        
 
@@ -517,9 +517,9 @@ export class Canvas{
           OBJ.position.x = photon.position.x;
           OBJ.position.y = photon.position.y;
           OBJ.position.z = photon.position.z;
-          OBJ.scale.x =  Math.floor(Math.random() * 20) + 1;
-          OBJ.scale.y =  Math.floor(Math.random() * 20) + 1;
-          OBJ.scale.z = Math.floor(Math.random() * 20) + 1;
+          //OBJ.scale.x =  Math.floor(Math.random() * 20) + 1;
+          //OBJ.scale.y =  Math.floor(Math.random() * 20) + 1;
+          //OBJ.scale.z = Math.floor(Math.random() * 20) + 1;
           OBJ.material = objShader.getShader();
           _sceneObjectsPile.push(OBJ);
           _scene.add(OBJ);
