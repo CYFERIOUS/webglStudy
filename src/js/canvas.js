@@ -137,8 +137,7 @@ export class Canvas{
       const elapsedTime = clock.getElapsedTime();
         requestAnimationFrame(() =>{
           
-        planicie.animation(elapsedTime);
-        objShader.setMouse(cursor.x, cursor.y);
+      
         
         
         
