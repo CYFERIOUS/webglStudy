@@ -17,6 +17,7 @@ import { Modeloader} from './modeloader.js'
 import { Raycaster } from './raycaster.js'
 import { Texture } from './texture.js'
 import { Shaders } from './shaders.js';
+import { AR } from './mindar.js';
 
 
 
@@ -74,7 +75,7 @@ let ray;
 let photon;
 let ph;
 let orbitous = false;
-
+let ar_camera;
 
     
 
@@ -95,16 +96,20 @@ export class Canvas{
     constructor(){
 
         _scene = new THREE.Scene();
-        _scene.background = texture.drawCubeBackGround();
+       // _scene.background = texture.drawCubeBackGround();
+       ar_camera = new AR();
+       const video = ar_camera.draw(1000, 1000)
+        _scene.background = texture.drawVideoBackground(video)
         _camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
         _camera.position.set(0,0,0);
         const cameraHelper = new THREE.CameraHelper( _camera );
         //_scene.add( cameraHelper );
         _axis = new THREE.AxesHelper( 5000 );
         _axis.position.set( 0, 0, 0 );
-        
+       
         //_scene.add(_axis);
         _scene.add(_camera);
+        
         
         this.geometries();
         
@@ -137,10 +142,7 @@ export class Canvas{
       const elapsedTime = clock.getElapsedTime();
         requestAnimationFrame(() =>{
           
-      
-        
-        
-        
+          
             this.animate();
             
             //angularVelocity
@@ -435,11 +437,14 @@ export class Canvas{
           _camera.aspect = renderWidth/renderHeight;
           _camera.updateProjectionMatrix();
 
-        _renderer = new THREE.WebGLRenderer();
+        _renderer = new THREE.WebGLRenderer({alpha:true});
         _renderer.setSize( renderWidth, renderHeight );
         _renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-        _rDomELement = _renderer.domElement;
+        _renderer.domElement.style.position = 'absolute';
+        _rDomELement = _renderer.domElement ;
+     
         document.body.appendChild( _rDomELement );
+       
     }
     addMouseHandler(){
       const _canvas = document.querySelector('body');
@@ -460,9 +465,6 @@ export class Canvas{
       event.preventDefault();
      cursor.x = event.clientX / window.innerWidth;
      cursor.y = event.clientY / window.innerHeight;
-
-    
-     
     }
 
    

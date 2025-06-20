@@ -43,6 +43,13 @@ export class Texture{
         ]);
         return _envTexture;
       }
+      drawVideoBackground(video) {
+        const videoTexture = new THREE.VideoTexture(video);
+        videoTexture.minFilter = THREE.LinearFilter;
+        videoTexture.magFilter = THREE.LinearFilter;
+        videoTexture.format = THREE.RGBFormat;
+        return videoTexture;
+      }
 
       draw(option) {
         switch (option) {

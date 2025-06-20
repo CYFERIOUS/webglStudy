@@ -3,8 +3,6 @@ import {Canvas} from './canvas.js';
 
 const c = new Canvas();
 
-
-
 const aspect = {
     width: window.innerWidth,
     height: window.innerHeight
@@ -15,18 +13,13 @@ class Container{
         c.draw(aspect.width,aspect.height);
         c.addMouseHandler();
         c.animate();
-        
     }
-
 }
-
 
 window.addEventListener("resize",()=>{
     aspect.width = window.innerWidth;
     aspect.height = window.innerHeight;
     c.draw(aspect.width,aspect.height);
-    
-
 })
 
 document.addEventListener("DOMContentLoaded", function(event) {
