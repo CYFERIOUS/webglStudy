@@ -17,6 +17,7 @@ import { Modeloader} from './modeloader.js'
 import { Raycaster } from './raycaster.js'
 import { Texture } from './texture.js'
 import { Shaders } from './shaders.js';
+import { PostProcessing } from './postProcessing.js';
 
 
 
@@ -75,6 +76,8 @@ let photon;
 let ph;
 let orbitous = false;
 
+let EffectComposer;
+
 
     
 
@@ -102,6 +105,10 @@ export class Canvas{
         //_scene.add( cameraHelper );
         _axis = new THREE.AxesHelper( 5000 );
         _axis.position.set( 0, 0, 0 );
+        _renderer = new THREE.WebGLRenderer();
+        EffectComposer = new PostProcessing(_renderer);
+        EffectComposer.renderPass(_scene,_camera);
+       
         
         //_scene.add(_axis);
         _scene.add(_camera);
@@ -137,10 +144,6 @@ export class Canvas{
       const elapsedTime = clock.getElapsedTime();
         requestAnimationFrame(() =>{
           
-      
-        
-        
-        
             this.animate();
             
             //angularVelocity
@@ -185,7 +188,8 @@ export class Canvas{
                 }
             }
               TWEEN.update(time);
-            _renderer.render( _scene, _camera );
+              EffectComposer.draw();
+            //_renderer.render( _scene, _camera );
         });
     }
 
@@ -435,10 +439,12 @@ export class Canvas{
           _camera.aspect = renderWidth/renderHeight;
           _camera.updateProjectionMatrix();
 
-        _renderer = new THREE.WebGLRenderer();
+        
         _renderer.setSize( renderWidth, renderHeight );
         _renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+       
         _rDomELement = _renderer.domElement;
+       
         document.body.appendChild( _rDomELement );
     }
     addMouseHandler(){
