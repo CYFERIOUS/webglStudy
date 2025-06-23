@@ -7,7 +7,16 @@ export class AR{
         video = document.createElement('video');
         navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
             video.srcObject = stream;
-            video.play();
+            video.play().then(() => {
+              // Playback started successfully
+          }).catch(error => {
+              if (error.name === 'AbortError') {
+                  console.warn('Playback aborted:', error.message);
+                  // Handle the specific AbortError if necessary
+              } else {
+                  console.error('Playback error:', error);
+              }
+          });
         })
         video.style.position = 'absolute';
         

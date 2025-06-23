@@ -18,7 +18,7 @@ import { Raycaster } from './raycaster.js'
 import { Texture } from './texture.js'
 import { Shaders } from './shaders.js';
 import { PostProcessing } from './postProcessing.js';
-
+import { AR } from './mindar.js';
 
 
 let _scene;
@@ -77,7 +77,7 @@ let ph;
 let orbitous = false;
 
 let EffectComposer;
-
+let ar_camera = new AR();
 
     
 
@@ -98,7 +98,10 @@ export class Canvas{
     constructor(){
 
         _scene = new THREE.Scene();
-        _scene.background = texture.drawCubeBackGround();
+        //_scene.background = texture.drawCubeBackGround();
+        ar_camera = new AR();
+        const video = ar_camera.draw(1000, 1000)
+         _scene.background = texture.drawVideoBackground(video)
         _camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
         _camera.position.set(0,0,0);
         const cameraHelper = new THREE.CameraHelper( _camera );
